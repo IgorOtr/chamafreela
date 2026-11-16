@@ -334,3 +334,41 @@ model Notification {
 
   @@index([userId, readAt])
 }
+
+model Municipality {
+  code      String   @id
+  name      String
+  uf        String   @default("RJ")
+  centerLat Float?
+  centerLng Float?
+  geojson   Json?
+  syncedAt  DateTime?
+  createdAt DateTime @default(now())
+
+  indicators TerritorialIndicator[]
+
+  @@index([name])
+}
+
+model TerritorialIndicator {
+  id             String   @id @default(uuid())
+  municipalityCode String
+  key            String
+  dimension      String   @default("")
+  dimensionLabel String?
+  label          String
+  value          Float?
+  unit           String
+  period         String
+  source         String
+  sourceUrl      String
+  scale          String   @default("Município")
+  methodology    String
+  limitations    String
+  fetchedAt      DateTime @default(now())
+
+  municipality Municipality @relation(fields: [municipalityCode], references: [code], onDelete: Cascade)
+
+  @@unique([municipalityCode, key, dimension, period])
+  @@index([municipalityCode, key])
+}

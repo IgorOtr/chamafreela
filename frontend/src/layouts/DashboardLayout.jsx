@@ -1,4 +1,4 @@
-import { Sparkles, SlidersHorizontal, Briefcase, Building2, ClipboardCheck, HeartHandshake, LayoutDashboard, LogOut, Menu, ScrollText, Search, ShieldCheck, Tags, UserCheck, UserCircle, Users, X } from 'lucide-react'
+import { Map as MapIcon, Sparkles, SlidersHorizontal, Briefcase, Building2, ClipboardCheck, HeartHandshake, LayoutDashboard, LogOut, Menu, ScrollText, Search, ShieldCheck, Tags, UserCheck, UserCircle, Users, X } from 'lucide-react'
 import { useState } from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import Logo from '../components/Logo.jsx'
@@ -13,6 +13,7 @@ const staffNav = [
   { to: '/painel/oportunidades', label: 'Oportunidades', icon: ClipboardCheck, roles: ['SUPERADMIN', 'ADMIN', 'MODERADOR'] },
   { to: '/painel/empresas', label: 'Empresas', icon: Building2, roles: ['SUPERADMIN', 'ADMIN'] },
   { to: '/painel/conecta', label: 'Conecta (critérios)', icon: SlidersHorizontal, roles: ['SUPERADMIN', 'ADMIN', 'MODERADOR'] },
+  { to: '/painel/mapa', label: 'CHAMALÁ Mapa', icon: MapIcon },
   { to: '/painel/categorias', label: 'Categorias', icon: Tags, roles: ['SUPERADMIN', 'ADMIN'] },
   { to: '/painel/solicitacoes', label: 'Solicitações LGPD', icon: ShieldCheck, roles: ['SUPERADMIN', 'ADMIN'] },
   { to: '/painel/auditoria', label: 'Auditoria', icon: ScrollText, roles: ['SUPERADMIN', 'ADMIN'] },
@@ -21,6 +22,7 @@ const userNav = [
   { to: '/painel', label: 'Dashboard', icon: LayoutDashboard, end: true },
   { to: '/painel/meu-perfil', label: 'Meu perfil', icon: UserCircle, roles: ['PROFISSIONAL'] },
   { to: '/painel/recomendadas', label: 'Recomendadas', icon: Sparkles, roles: ['PROFISSIONAL'] },
+  { to: '/painel/mapa', label: 'CHAMALÁ Mapa', icon: MapIcon },
   { to: '/painel/interesses', label: 'Meus interesses', icon: HeartHandshake, roles: ['PROFISSIONAL'] },
   { to: '/painel/empresa', label: 'Perfil da empresa', icon: Building2, roles: ['EMPRESA'] },
   { to: '/painel/oportunidades', label: 'Minhas oportunidades', icon: Briefcase, roles: ['EMPRESA'] },

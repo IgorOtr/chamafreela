@@ -12,6 +12,8 @@ Especificação completa em [`claude.md`](claude.md); arquitetura em [`docs/ARQU
 
 **Fase 4 — CHAMALÁ Conecta:** motor de correspondência por regras e pesos configuráveis (categoria/serviço 30, localização 25, qualificações 15, disponibilidade 15, modalidade 10, preferências 5), com índice 0–100, detalhamento por critério e justificativa em português. Categoria/serviço incompatível nunca gera recomendação. As recomendações são calculadas ao publicar uma oportunidade e ao aprovar/alterar um perfil; há painel de recomendadas, notificações internas (com opt-out; nada é enviado por e-mail/WhatsApp) e tela administrativa de critérios (auditada, recalcula tudo). **Limitação:** a localização compara cidade/bairro; não há distância em km até existir geocodificação.
 
+**Fase 5 — CHAMALÁ Mapa:** mapa Leaflet/OpenStreetMap, indicadores reais do IBGE (Censo 2022: população, área e densidade; PIB dos Municípios; CEMPRE: unidades locais e pessoal ocupado por setor CNAE) guardados em `TerritorialIndicator` com fonte, referência, unidade, escala, metodologia e limitações, e contagens agregadas do cadastro da plataforma por município e categoria. Lacunas e dados omitidos aparecem explicitamente; não há dados por bairro nem mapa de calor de demanda. Sincronização: botão para admin ou `npm run territorial:sync` (Sul Fluminense, 8 municípios). A série CEMPRE usada termina em 2021. Os tiles públicos do OpenStreetMap servem para desenvolvimento; em produção use um provedor de tiles adequado ao volume.
+
 Pendente da Fase 2: upload de arquivos do portfólio (hoje apenas links https) — depende da escolha do armazenamento S3-compatível.
 
 ## Requisitos

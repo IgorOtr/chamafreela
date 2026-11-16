@@ -13,6 +13,7 @@ const ADMIN_BASE = [
   'opportunities:moderate',
   'companies:manage',
   'match:configure',
+  'territorial:manage',
 ];
 
 export const PERMISSIONS = {

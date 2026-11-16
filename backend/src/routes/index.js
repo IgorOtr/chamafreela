@@ -9,6 +9,7 @@ import notificationsRoutes from '../modules/notifications/notifications.routes.j
 import opportunitiesRoutes from '../modules/opportunities/opportunities.routes.js';
 import professionalsRoutes from '../modules/professionals/professionals.routes.js';
 import recommendationsRoutes from '../modules/recommendations/recommendations.routes.js';
+import territorialRoutes from '../modules/territorial/territorial.routes.js';
 import usersRoutes from '../modules/users/users.routes.js';
 
 const router = Router();
@@ -24,4 +25,5 @@ router.use('/companies', companiesRoutes);
 router.use('/opportunities', opportunitiesRoutes);
 router.use('/recommendations', recommendationsRoutes);
 router.use('/notifications', notificationsRoutes);
+router.use('/territorial', territorialRoutes);
 export default router;

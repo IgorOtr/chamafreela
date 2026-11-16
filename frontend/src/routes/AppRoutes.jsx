@@ -13,6 +13,7 @@ import CompanyProfilePage from '../modules/companies/CompanyProfilePage.jsx'
 import MyOpportunitiesPage from '../modules/companies/MyOpportunitiesPage.jsx'
 import RecommendedPage from '../modules/professionals/RecommendedPage.jsx'
 import NotificationsPage from '../pages/NotificationsPage.jsx'
+import MapPage from '../modules/territorial/MapPage.jsx'
 import MyInterestsPage from '../modules/professionals/MyInterestsPage.jsx'
 import Opportunities from '../pages/Opportunities.jsx'
 import OpportunityDetail from '../pages/OpportunityDetail.jsx'
@@ -66,6 +67,7 @@ export default function AppRoutes() {
         <Route path="solicitacoes" element={<RequireAuth roles={['SUPERADMIN', 'ADMIN']}><DataRequestsPage /></RequireAuth>} />
         <Route path="recomendadas" element={<RequireAuth roles={['PROFISSIONAL']}><RecommendedPage /></RequireAuth>} />
         <Route path="conecta" element={<RequireAuth roles={['SUPERADMIN', 'ADMIN', 'MODERADOR']}><MatchConfigPage /></RequireAuth>} />
+        <Route path="mapa" element={<MapPage />} />
         <Route path="notificacoes" element={<NotificationsPage />} />
         <Route path="empresa" element={<RequireAuth roles={['EMPRESA']}><CompanyProfilePage /></RequireAuth>} />
         <Route path="oportunidades" element={<RequireAuth roles={['EMPRESA', 'SUPERADMIN', 'ADMIN', 'MODERADOR']}><OpportunitiesPanel /></RequireAuth>} />
