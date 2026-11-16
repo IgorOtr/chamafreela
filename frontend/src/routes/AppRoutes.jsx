@@ -6,6 +6,13 @@ import PublicLayout from '../layouts/PublicLayout.jsx'
 import AdminDashboard from '../modules/admin/AdminDashboard.jsx'
 import AuditPage from '../modules/admin/AuditPage.jsx'
 import CategoriesPage from '../modules/admin/CategoriesPage.jsx'
+import CompaniesAdminPage from '../modules/admin/CompaniesAdminPage.jsx'
+import OpportunitiesAdminPage from '../modules/admin/OpportunitiesAdminPage.jsx'
+import CompanyProfilePage from '../modules/companies/CompanyProfilePage.jsx'
+import MyOpportunitiesPage from '../modules/companies/MyOpportunitiesPage.jsx'
+import MyInterestsPage from '../modules/professionals/MyInterestsPage.jsx'
+import Opportunities from '../pages/Opportunities.jsx'
+import OpportunityDetail from '../pages/OpportunityDetail.jsx'
 import DataRequestsPage from '../modules/admin/DataRequestsPage.jsx'
 import ProfessionalsPage from '../modules/admin/ProfessionalsPage.jsx'
 import UsersPage from '../modules/admin/UsersPage.jsx'
@@ -32,6 +39,11 @@ function PanelHome() {
   return isStaff(user.role) ? <AdminDashboard /> : <MemberDashboard />
 }
 
+function OpportunitiesPanel() {
+  const { user } = useAuth()
+  return isStaff(user.role) ? <OpportunitiesAdminPage /> : <MyOpportunitiesPage />
+}
+
 export default function AppRoutes() {
   return (
     <Routes>
@@ -39,6 +51,8 @@ export default function AppRoutes() {
         <Route index element={<Home />} />
         <Route path="profissionais" element={<Catalog />} />
         <Route path="profissionais/:slug" element={<ProfessionalPublic />} />
+        <Route path="oportunidades" element={<Opportunities />} />
+        <Route path="oportunidades/:id" element={<OpportunityDetail />} />
         <Route path="entrar" element={<LoginPage />} />
         <Route path="cadastro" element={<RegisterPage />} />
       </Route>
@@ -47,6 +61,10 @@ export default function AppRoutes() {
         <Route path="meu-perfil" element={<RequireAuth roles={['PROFISSIONAL']}><MyProfilePage /></RequireAuth>} />
         <Route path="profissionais" element={<RequireAuth roles={['SUPERADMIN', 'ADMIN', 'MODERADOR']}><ProfessionalsPage /></RequireAuth>} />
         <Route path="solicitacoes" element={<RequireAuth roles={['SUPERADMIN', 'ADMIN']}><DataRequestsPage /></RequireAuth>} />
+        <Route path="empresa" element={<RequireAuth roles={['EMPRESA']}><CompanyProfilePage /></RequireAuth>} />
+        <Route path="oportunidades" element={<RequireAuth roles={['EMPRESA', 'SUPERADMIN', 'ADMIN', 'MODERADOR']}><OpportunitiesPanel /></RequireAuth>} />
+        <Route path="interesses" element={<RequireAuth roles={['PROFISSIONAL']}><MyInterestsPage /></RequireAuth>} />
+        <Route path="empresas" element={<RequireAuth roles={['SUPERADMIN', 'ADMIN']}><CompaniesAdminPage /></RequireAuth>} />
         <Route path="usuarios" element={<RequireAuth roles={['SUPERADMIN', 'ADMIN', 'MODERADOR']}><UsersPage /></RequireAuth>} />
         <Route path="categorias" element={<RequireAuth roles={['SUPERADMIN', 'ADMIN']}><CategoriesPage /></RequireAuth>} />
         <Route path="auditoria" element={<RequireAuth roles={['SUPERADMIN', 'ADMIN']}><AuditPage /></RequireAuth>} />

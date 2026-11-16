@@ -4,7 +4,7 @@ import { Card, EmptyState, Pagination, Spinner } from '../../components/ui.jsx'
 import { useFetch } from '../../hooks/useFetch.js'
 import { formatDateTime } from '../../utils/roles.js'
 
-const ACTION = { USER_UPDATE: 'Usuário alterado', PROFESSIONAL_SUBMIT: 'Perfil enviado', PROFESSIONAL_UPDATE: 'Perfil editado', PROFESSIONAL_APROVAR: 'Perfil aprovado', PROFESSIONAL_REJEITAR: 'Perfil rejeitado', PROFESSIONAL_OCULTAR: 'Perfil ocultado', PROFESSIONAL_REEXIBIR: 'Perfil reexibido', PROFESSIONAL_ADMIN_EDIT: 'Perfil editado (admin)', DATA_REQUEST_CREATE: 'Solicitação LGPD', DATA_REQUEST_RESOLVE: 'Solicitação LGPD concluída', CATEGORY_CREATE: 'Categoria criada', CATEGORY_UPDATE: 'Categoria alterada' }
+const ACTION = { OPPORTUNITY_SUBMIT: 'Oportunidade enviada', OPPORTUNITY_UPDATE: 'Oportunidade editada', OPPORTUNITY_CLOSE: 'Oportunidade encerrada pela empresa', OPPORTUNITY_APROVAR: 'Oportunidade aprovada', OPPORTUNITY_REJEITAR: 'Oportunidade rejeitada', OPPORTUNITY_ENCERRAR: 'Oportunidade encerrada', COMPANY_CREATE: 'Empresa cadastrada', COMPANY_UPDATE: 'Empresa editada', COMPANY_STATUS: 'Situação da empresa alterada', USER_UPDATE: 'Usuário alterado', PROFESSIONAL_SUBMIT: 'Perfil enviado', PROFESSIONAL_UPDATE: 'Perfil editado', PROFESSIONAL_APROVAR: 'Perfil aprovado', PROFESSIONAL_REJEITAR: 'Perfil rejeitado', PROFESSIONAL_OCULTAR: 'Perfil ocultado', PROFESSIONAL_REEXIBIR: 'Perfil reexibido', PROFESSIONAL_ADMIN_EDIT: 'Perfil editado (admin)', DATA_REQUEST_CREATE: 'Solicitação LGPD', DATA_REQUEST_RESOLVE: 'Solicitação LGPD concluída', CATEGORY_CREATE: 'Categoria criada', CATEGORY_UPDATE: 'Categoria alterada' }
 
 export default function AuditPage() {
   const [page, setPage] = useState(1)

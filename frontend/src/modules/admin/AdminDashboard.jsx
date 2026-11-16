@@ -21,7 +21,9 @@ export default function AdminDashboard() {
         <Stat label="Total de usuários" value={data.totalUsers} />
         <Stat label="Profissionais aprovados" value={data.professionalsByStatus.APROVADO ?? 0} />
         <Stat label="Aguardando aprovação" value={data.professionalsByStatus.PENDENTE ?? 0} />
-        <Stat label="Empresas" value={data.usersByRole.EMPRESA ?? 0} />
+        <Stat label="Empresas" value={data.totalCompanies} />
+        <Stat label="Oportunidades publicadas" value={data.opportunitiesByStatus.PUBLICADA ?? 0} />
+        <Stat label="Oportunidades pendentes" value={data.opportunitiesByStatus.PENDENTE ?? 0} />
         <Stat label="Solicitações LGPD abertas" value={data.openDataRequests} />
       </div>
       <Card>
@@ -48,7 +50,7 @@ export default function AdminDashboard() {
           <ul className="space-y-1.5 text-sm">{data.topCategories.map((c) => <li key={c.name} className="flex justify-between"><span>{c.name}</span><b>{c.count}</b></li>)}</ul>
         )}
       </Card>
-      <p className="text-sm text-ink/60">Indicadores de oportunidades e assinaturas serão exibidos quando esses módulos forem implementados.</p>
+      <p className="text-sm text-ink/60">Indicadores de assinaturas serão exibidos quando esse módulo for implementado.</p>
     </div>
   )
 }

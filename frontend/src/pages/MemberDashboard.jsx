@@ -5,8 +5,8 @@ import { ROLE_LABEL } from '../utils/roles.js'
 
 const NEXT = {
   PROFISSIONAL: null,
-  EMPRESA: 'Em breve: perfil empresarial e publicação de oportunidades (Fase 3).',
-  CLIENTE: 'Já é possível buscar profissionais no catálogo. Oportunidades chegam na Fase 3.',
+  EMPRESA: null,
+  CLIENTE: 'Busque profissionais no catálogo e acompanhe as oportunidades abertas.',
 }
 
 export default function MemberDashboard() {
@@ -21,6 +21,8 @@ export default function MemberDashboard() {
         <h2 className="font-display text-lg font-bold">Sua conta está criada</h2>
         {user.role === 'PROFISSIONAL' ? (
           <div className="mt-2 space-y-3 text-sm text-ink/70"><p>Complete seu perfil profissional para aparecer no catálogo.</p><Link to="/painel/meu-perfil"><Button>Meu perfil</Button></Link></div>
+        ) : user.role === 'EMPRESA' ? (
+          <div className="mt-2 space-y-3 text-sm text-ink/70"><p>Complete o perfil da empresa e publique suas demandas.</p><div className="flex gap-2"><Link to="/painel/empresa"><Button>Perfil da empresa</Button></Link><Link to="/painel/oportunidades"><Button variant="outline">Minhas oportunidades</Button></Link></div></div>
         ) : <p className="mt-1 text-sm text-ink/70">{NEXT[user.role]}</p>}
       </Card>
     </div>

@@ -20,6 +20,7 @@ export default function Home() {
             <div className="mt-8 flex flex-wrap gap-3">
               <Link to="/cadastro"><Button variant="accent" className="px-6 py-3 text-base">Quero me cadastrar</Button></Link>
               <Link to="/profissionais"><Button variant="outline" className="px-6 py-3 text-base">Ver profissionais</Button></Link>
+              <Link to="/oportunidades"><Button variant="outline" className="px-6 py-3 text-base">Ver oportunidades</Button></Link>
               <Link to="/entrar"><Button variant="ghost" className="px-6 py-3 text-base text-white hover:bg-white/10" >Já tenho conta</Button></Link>
             </div>
           </div>

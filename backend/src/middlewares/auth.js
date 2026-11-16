@@ -33,3 +33,15 @@ export const requireRole = (...roles) => (req, _res, next) => {
   if (!roles.includes(req.user.role)) return next(forbidden());
   next();
 };
+
+// Identifica o usuário quando há token válido, sem exigir login (rotas públicas com visão enriquecida).
+export const optionalAuthenticate = asyncHandler(async (req, _res, next) => {
+  const [scheme, token] = (req.headers.authorization ?? '').split(' ');
+  if (scheme !== 'Bearer' || !token) return next();
+  try {
+    const payload = jwt.verify(token, env.JWT_ACCESS_SECRET);
+    const user = await prisma.user.findUnique({ where: { id: payload.sub } });
+    if (user && user.status !== 'SUSPENSO') req.user = { id: user.id, role: user.role, name: user.name, email: user.email };
+  } catch { /* token inválido: segue como visitante */ }
+  next();
+});

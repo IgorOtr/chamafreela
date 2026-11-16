@@ -1,4 +1,4 @@
-import { LayoutDashboard, LogOut, Menu, ScrollText, Search, ShieldCheck, Tags, UserCheck, UserCircle, Users, X } from 'lucide-react'
+import { Briefcase, Building2, ClipboardCheck, HeartHandshake, LayoutDashboard, LogOut, Menu, ScrollText, Search, ShieldCheck, Tags, UserCheck, UserCircle, Users, X } from 'lucide-react'
 import { useState } from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import Logo from '../components/Logo.jsx'
@@ -9,6 +9,8 @@ const staffNav = [
   { to: '/painel', label: 'Dashboard', icon: LayoutDashboard, end: true },
   { to: '/painel/usuarios', label: 'Usuários', icon: Users, roles: ['SUPERADMIN', 'ADMIN', 'MODERADOR'] },
   { to: '/painel/profissionais', label: 'Profissionais', icon: UserCheck, roles: ['SUPERADMIN', 'ADMIN', 'MODERADOR'] },
+  { to: '/painel/oportunidades', label: 'Oportunidades', icon: ClipboardCheck, roles: ['SUPERADMIN', 'ADMIN', 'MODERADOR'] },
+  { to: '/painel/empresas', label: 'Empresas', icon: Building2, roles: ['SUPERADMIN', 'ADMIN'] },
   { to: '/painel/categorias', label: 'Categorias', icon: Tags, roles: ['SUPERADMIN', 'ADMIN'] },
   { to: '/painel/solicitacoes', label: 'Solicitações LGPD', icon: ShieldCheck, roles: ['SUPERADMIN', 'ADMIN'] },
   { to: '/painel/auditoria', label: 'Auditoria', icon: ScrollText, roles: ['SUPERADMIN', 'ADMIN'] },
@@ -16,6 +18,10 @@ const staffNav = [
 const userNav = [
   { to: '/painel', label: 'Dashboard', icon: LayoutDashboard, end: true },
   { to: '/painel/meu-perfil', label: 'Meu perfil', icon: UserCircle, roles: ['PROFISSIONAL'] },
+  { to: '/painel/interesses', label: 'Meus interesses', icon: HeartHandshake, roles: ['PROFISSIONAL'] },
+  { to: '/painel/empresa', label: 'Perfil da empresa', icon: Building2, roles: ['EMPRESA'] },
+  { to: '/painel/oportunidades', label: 'Minhas oportunidades', icon: Briefcase, roles: ['EMPRESA'] },
+  { to: '/oportunidades', label: 'Oportunidades abertas', icon: Search, roles: ['PROFISSIONAL', 'CLIENTE'] },
   { to: '/profissionais', label: 'Catálogo', icon: Search },
 ]
 

@@ -3,7 +3,9 @@ import adminRoutes from '../modules/admin/admin.routes.js';
 import auditRoutes from '../modules/audit/audit.routes.js';
 import authRoutes from '../modules/auth/auth.routes.js';
 import categoriesRoutes from '../modules/categories/categories.routes.js';
+import companiesRoutes from '../modules/companies/companies.routes.js';
 import datarequestsRoutes from '../modules/datarequests/datarequests.routes.js';
+import opportunitiesRoutes from '../modules/opportunities/opportunities.routes.js';
 import professionalsRoutes from '../modules/professionals/professionals.routes.js';
 import usersRoutes from '../modules/users/users.routes.js';
 
@@ -16,4 +18,6 @@ router.use('/admin', adminRoutes);
 router.use('/audit', auditRoutes);
 router.use('/professionals', professionalsRoutes);
 router.use('/data-requests', datarequestsRoutes);
+router.use('/companies', companiesRoutes);
+router.use('/opportunities', opportunitiesRoutes);
 export default router;

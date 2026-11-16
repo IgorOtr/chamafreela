@@ -10,12 +10,14 @@ const ADMIN_BASE = [
   'professionals:moderate',
   'professionals:manage',
   'datarequests:manage',
+  'opportunities:moderate',
+  'companies:manage',
 ];
 
 export const PERMISSIONS = {
   SUPERADMIN: ['*'],
   ADMIN: [...ADMIN_BASE],
-  MODERADOR: ['admin:dashboard', 'users:read', 'professionals:moderate'],
+  MODERADOR: ['admin:dashboard', 'users:read', 'professionals:moderate', 'opportunities:moderate'],
   PROFISSIONAL: ['profile:own'],
   EMPRESA: ['company:own'],
   CLIENTE: ['profile:own'],

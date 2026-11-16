@@ -12,6 +12,7 @@ export default function PublicLayout() {
           <Logo />
           <nav className="flex items-center gap-2">
             <Link to="/profissionais" className="hidden px-3 text-sm font-semibold text-brand-700 sm:block">Profissionais</Link>
+            <Link to="/oportunidades" className="hidden px-3 text-sm font-semibold text-brand-700 sm:block">Oportunidades</Link>
             {user ? (
               <Link to="/painel"><Button>Meu painel</Button></Link>
             ) : (
