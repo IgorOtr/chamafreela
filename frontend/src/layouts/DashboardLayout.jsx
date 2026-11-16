@@ -1,4 +1,4 @@
-import { LineChart as InsightsIcon, Map as MapIcon, Sparkles, SlidersHorizontal, Briefcase, Building2, ClipboardCheck, HeartHandshake, LayoutDashboard, LogOut, Menu, ScrollText, Search, ShieldCheck, Tags, UserCheck, UserCircle, Users, X } from 'lucide-react'
+import { LineChart as InsightsIcon, Palette, Map as MapIcon, Sparkles, SlidersHorizontal, Briefcase, Building2, ClipboardCheck, HeartHandshake, LayoutDashboard, LogOut, Menu, ScrollText, Search, ShieldCheck, Tags, UserCheck, UserCircle, Users, X } from 'lucide-react'
 import { useState } from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import Logo from '../components/Logo.jsx'
@@ -24,6 +24,7 @@ const userNav = [
   { to: '/painel/recomendadas', label: 'Recomendadas', icon: Sparkles, roles: ['PROFISSIONAL'] },
   { to: '/painel/mapa', label: 'CHAMALÁ Mapa', icon: MapIcon },
   { to: '/painel/insights', label: 'CHAMALÁ Insights', icon: InsightsIcon },
+  { to: '/painel/studio', label: 'CHAMALÁ Studio', icon: Palette, roles: ['PROFISSIONAL', 'EMPRESA'] },
   { to: '/painel/interesses', label: 'Meus interesses', icon: HeartHandshake, roles: ['PROFISSIONAL'] },
   { to: '/painel/empresa', label: 'Perfil da empresa', icon: Building2, roles: ['EMPRESA'] },
   { to: '/painel/oportunidades', label: 'Minhas oportunidades', icon: Briefcase, roles: ['EMPRESA'] },

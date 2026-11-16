@@ -40,6 +40,8 @@ model User {
   dataRequests  DataRequest[]
   notifications Notification[]
   simulations   Simulation[]
+  brandKit      BrandKit?
+  marketingAssets MarketingAsset[]
   notifyRecommendations Boolean @default(true)
 
   @@index([role, status])
@@ -392,4 +394,52 @@ model Simulation {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, createdAt])
+}
+
+enum AssetType {
+  LEGENDA
+  PROMOCAO
+  ROTEIRO_VIDEO
+  ENQUETE
+  DESCRICAO_SERVICO
+  APRESENTACAO
+  CARTAO
+  POST
+  STORY
+  CALENDARIO
+}
+
+model BrandKit {
+  id           String   @id @default(uuid())
+  userId       String   @unique
+  businessName String
+  tagline      String?
+  segment      String   @default("geral")
+  city         String?
+  mainService  String?
+  differentiator String?
+  contactLine  String?
+  colors       Json
+  fontKey      String   @default("moderna")
+  logoConfig   Json
+  logoSvg      String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model MarketingAsset {
+  id        String    @id @default(uuid())
+  userId    String
+  type      AssetType
+  title     String
+  content   String    @default("")
+  data      Json?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, type, createdAt])
 }

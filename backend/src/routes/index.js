@@ -10,6 +10,7 @@ import opportunitiesRoutes from '../modules/opportunities/opportunities.routes.j
 import professionalsRoutes from '../modules/professionals/professionals.routes.js';
 import recommendationsRoutes from '../modules/recommendations/recommendations.routes.js';
 import simulationsRoutes from '../modules/simulations/simulations.routes.js';
+import studioRoutes from '../modules/studio/studio.routes.js';
 import territorialRoutes from '../modules/territorial/territorial.routes.js';
 import usersRoutes from '../modules/users/users.routes.js';
 
@@ -28,4 +29,5 @@ router.use('/recommendations', recommendationsRoutes);
 router.use('/notifications', notificationsRoutes);
 router.use('/territorial', territorialRoutes);
 router.use('/simulations', simulationsRoutes);
+router.use('/studio', studioRoutes);
 export default router;

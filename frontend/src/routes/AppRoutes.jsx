@@ -16,6 +16,7 @@ import NotificationsPage from '../pages/NotificationsPage.jsx'
 import HistoryPage from '../modules/insights/HistoryPage.jsx'
 import InsightsPage from '../modules/insights/InsightsPage.jsx'
 import SimulationResultPage from '../modules/insights/SimulationResultPage.jsx'
+import StudioPage from '../modules/studio/StudioPage.jsx'
 import MapPage from '../modules/territorial/MapPage.jsx'
 import MyInterestsPage from '../modules/professionals/MyInterestsPage.jsx'
 import Opportunities from '../pages/Opportunities.jsx'
@@ -73,6 +74,7 @@ export default function AppRoutes() {
         <Route path="insights" element={<InsightsPage />} />
         <Route path="insights/historico" element={<HistoryPage />} />
         <Route path="insights/:id" element={<SimulationResultPage />} />
+        <Route path="studio" element={<RequireAuth roles={['PROFISSIONAL', 'EMPRESA']}><StudioPage /></RequireAuth>} />
         <Route path="mapa" element={<MapPage />} />
         <Route path="notificacoes" element={<NotificationsPage />} />
         <Route path="empresa" element={<RequireAuth roles={['EMPRESA']}><CompanyProfilePage /></RequireAuth>} />
