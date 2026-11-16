@@ -4,6 +4,7 @@ import { Button, Card, Field, Input, inputClass } from '../../components/ui.jsx'
 import { useAuth } from '../../contexts/AuthContext.jsx'
 import { errorMessage } from '../../services/api.js'
 import useSeo from '../../hooks/useSeo.js'
+import { useFetch } from '../../hooks/useFetch.js'
 
 const ROLES = [
   { value: 'PROFISSIONAL', label: 'Sou profissional / autônomo' },
@@ -18,6 +19,7 @@ export default function RegisterPage() {
   const [form, setForm] = useState({ name: '', email: '', password: '', role: 'PROFISSIONAL', consent: false })
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const capacity = useFetch('/plans/capacity')
   if (user) return <Navigate to="/painel" replace />
   const set = (k) => (e) => setForm({ ...form, [k]: e.target.type === 'checkbox' ? e.target.checked : e.target.value })
 
@@ -25,6 +27,18 @@ export default function RegisterPage() {
     e.preventDefault()
     setLoading(true); setError('')
     try { await register(form); navigate('/painel') } catch (err) { setError(errorMessage(err)) } finally { setLoading(false) }
+  }
+
+  if (capacity.data && capacity.data.limited && !capacity.data.open) {
+    return (
+      <div className="mx-auto max-w-md px-4 py-12">
+        <Card className="space-y-3 text-center">
+          <h1 className="font-display text-2xl font-extrabold">Vagas gratuitas esgotadas</h1>
+          <p className="text-sm text-ink/70">No momento, todas as vagas do plano gratuito estão preenchidas. Novos cadastros serão liberados em breve.</p>
+          <p className="text-sm">Já tem conta? <Link to="/entrar" className="font-semibold text-brand-700 underline">Entrar</Link></p>
+        </Card>
+      </div>
+    )
   }
 
   return (

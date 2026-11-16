@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { authenticate, requirePermission } from '../../middlewares/auth.js';
 import { validate } from '../../middlewares/validate.js';
 import { asyncHandler } from '../../utils/asyncHandler.js';
+import { getFreeCapacity } from './capacity.js';
 import * as service from './plans.service.js';
 
 const router = Router();
@@ -28,7 +29,15 @@ const patchSchema = z.object({
   highlighted: z.boolean().optional(),
   active: z.boolean().optional(),
   position: z.number().int().min(0).max(100).optional(),
+  maxUsers: z.number().int().min(0).max(10_000_000).nullable().optional(),
 }).refine((v) => Object.keys(v).length > 0, 'Nada para atualizar');
+
+// Público: só informa se há vagas gratuitas (sem revelar números).
+router.get('/capacity', asyncHandler(async (_req, res) => {
+  const c = await getFreeCapacity();
+  res.set('Cache-Control', 'no-store');
+  res.json({ limited: c.limited, open: c.open });
+}));
 
 router.get('/admin', authenticate, requirePermission('plans:manage'), asyncHandler(async (_req, res) => res.json(await service.listAdmin())));
 router.patch('/admin/:code', authenticate, requirePermission('plans:manage'), validate(patchSchema),

@@ -1,5 +1,7 @@
 import { prisma } from '../../database/prisma.js';
-import { badRequest, notFound } from '../../utils/errors.js';
+import { can } from '../../config/permissions.js';
+import { badRequest, forbidden, notFound } from '../../utils/errors.js';
+import { getFreeCapacity } from './capacity.js';
 import * as audit from '../audit/audit.service.js';
 import { billingEnabled } from '../../integrations/payments/gateway.js';
 
@@ -14,16 +16,22 @@ export async function listPublic() {
 }
 
 export async function listAdmin() {
-  const [plans, counts] = await Promise.all([
+  const [plans, counts, freeCapacity] = await Promise.all([
     prisma.plan.findMany({ orderBy: { position: 'asc' } }),
     prisma.subscription.groupBy({ by: ['planCode'], where: { status: 'ATIVA' }, _count: { _all: true } }),
+    getFreeCapacity(),
   ]);
-  return { billingEnabled: billingEnabled(), plans: plans.map((p) => ({ ...p, activeSubscribers: counts.find((c) => c.planCode === p.code)?._count._all ?? 0 })) };
+  return { billingEnabled: billingEnabled(), freeCapacity, plans: plans.map((p) => ({ ...p, activeSubscribers: counts.find((c) => c.planCode === p.code)?._count._all ?? 0 })) };
 }
 
 export async function update(actor, code, data, ip) {
   const plan = await prisma.plan.findUnique({ where: { code } });
   if (!plan) throw notFound('Plano não encontrado');
+  if ('maxUsers' in data) {
+    // O limite de cadastros é uma decisão do superadministrador (administradores comuns apenas visualizam).
+    if (!can(actor.role, '*')) throw forbidden('Apenas o superadministrador altera o limite de cadastros do plano FREE');
+    if (code !== 'FREE') throw badRequest('O limite de cadastros só existe no plano FREE');
+  }
   if (code === 'FREE') {
     if (data.priceCents != null && data.priceCents !== 0) throw badRequest('O plano FREE deve permanecer gratuito');
     if (data.active === false) throw badRequest('O plano FREE não pode ser desativado');

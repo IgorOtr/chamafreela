@@ -463,6 +463,8 @@ model Plan {
   promoNote       String?
   features        Json
   limits          Json     @default("{}")
+  // Somente no plano FREE: máximo de contas gratuitas (não-admin) que podem existir. Nulo = sem limite.
+  maxUsers        Int?
   available       Boolean  @default(false)
   highlighted     Boolean  @default(false)
   active          Boolean  @default(true)

@@ -1,6 +1,7 @@
 import { CheckCircle2, CircleAlert } from 'lucide-react'
 import { useState } from 'react'
 import { Badge, Button, Card, Field, Input, Modal, Spinner, inputClass } from '../../components/ui.jsx'
+import { useAuth } from '../../contexts/AuthContext.jsx'
 import { useToast } from '../../contexts/ToastContext.jsx'
 import { useFetch } from '../../hooks/useFetch.js'
 import { api, errorMessage } from '../../services/api.js'
@@ -9,6 +10,15 @@ const money = (c) => (c == null ? '—' : (c / 100).toLocaleString('pt-BR', { st
 const toCents = (v) => (v === '' || v == null ? null : Math.round(Number(String(v).replace(',', '.')) * 100))
 const fromCents = (c) => (c == null ? '' : (c / 100).toFixed(2).replace('.', ','))
 const LIMITS = [['simulationsPerMonth', 'Simulações por mês (Insights)'], ['studioGenerationsPerMonth', 'Gerações de texto/calendário por mês (Studio)'], ['studioAssets', 'Materiais salvos (Studio)']]
+
+function CapacityLine({ c }) {
+  if (!c.limited) return <p className="text-sm"><b>{c.used}</b> contas FREE · <Badge color="gray">sem limite de cadastros</Badge></p>
+  return (
+    <p className="text-sm">
+      <b>{c.used}</b> de <b>{c.max}</b> vagas FREE ocupadas · {c.open ? <Badge color="green">{c.remaining} vaga(s) restante(s)</Badge> : <Badge color="red">Cadastros fechados</Badge>}
+    </p>
+  )
+}
 
 function BillingStatus() {
   const toast = useToast()
@@ -31,6 +41,8 @@ function BillingStatus() {
 
 export default function PlansAdminPage() {
   const toast = useToast()
+  const { user } = useAuth()
+  const isSuper = user.role === 'SUPERADMIN'
   const { data, loading, error, reload } = useFetch('/plans/admin')
   const [edit, setEdit] = useState(null)
   const [saving, setSaving] = useState(false)
@@ -38,7 +50,7 @@ export default function PlansAdminPage() {
   const open = (p) => setEdit({
     code: p.code, name: p.name, tagline: p.tagline, price: fromCents(p.priceCents), promoPrice: fromCents(p.promoPriceCents), promoMonths: p.promoMonths ?? '', promoNote: p.promoNote ?? '',
     features: p.features.join('\n'), available: p.available, highlighted: p.highlighted, active: p.active, position: p.position,
-    limits: Object.fromEntries(LIMITS.map(([k]) => [k, p.limits?.[k] ?? ''])),
+    limits: Object.fromEntries(LIMITS.map(([k]) => [k, p.limits?.[k] ?? ''])), maxUsers: p.maxUsers ?? '',
   })
   const save = async (e) => {
     e.preventDefault(); setSaving(true)
@@ -46,6 +58,8 @@ export default function PlansAdminPage() {
       name: edit.name, tagline: edit.tagline, priceCents: toCents(edit.price) ?? 0, promoPriceCents: toCents(edit.promoPrice), promoMonths: edit.promoMonths === '' ? null : Number(edit.promoMonths),
       promoNote: edit.promoNote || null, features: edit.features.split('\n').map((s) => s.trim()).filter(Boolean), available: edit.available, highlighted: edit.highlighted, active: edit.active, position: Number(edit.position),
       limits: Object.fromEntries(LIMITS.map(([k]) => [k, edit.limits[k] === '' ? null : Number(edit.limits[k])])),
+      // Somente o superadministrador altera o limite de cadastros do FREE (o servidor também exige).
+      ...(edit.code === 'FREE' && isSuper ? { maxUsers: edit.maxUsers === '' ? null : Number(edit.maxUsers) } : {}),
     }
     try { await api.patch(`/plans/admin/${edit.code}`, body); toast.success('Plano atualizado.'); setEdit(null); reload() } catch (err) { toast.error(errorMessage(err)) } finally { setSaving(false) }
   }
@@ -64,6 +78,7 @@ export default function PlansAdminPage() {
               <span className="flex gap-1">{!p.active && <Badge color="gray">Inativo</Badge>}<Badge color={p.available ? 'green' : 'amber'}>{p.available ? 'Disponível' : 'Em breve'}</Badge></span></div>
             <p className="text-sm text-ink/60">{p.tagline}</p>
             <p className="text-sm"><b>{money(p.priceCents)}</b>/mês{p.promoPriceCents != null && <> · promoção <b>{money(p.promoPriceCents)}</b> por {p.promoMonths} meses</>}</p>
+            {p.code === 'FREE' && <CapacityLine c={data.freeCapacity} />}
             <p className="text-xs text-ink/60">Assinantes ativos: <b>{p.activeSubscribers}</b> · Limites: {LIMITS.map(([k, l]) => `${l.split(' (')[0]} ${p.limits?.[k] ?? '∞'}`).join(' · ')}</p>
             <Button variant="outline" onClick={() => open(p)}>Editar plano</Button>
           </Card>
@@ -83,6 +98,13 @@ export default function PlansAdminPage() {
             </div>
             <Input id="pl-note" label="Condições da promoção (texto público)" value={edit.promoNote} onChange={set('promoNote')} />
             <Field label="Benefícios (um por linha)" htmlFor="pl-feat"><textarea id="pl-feat" rows={5} required className={inputClass} value={edit.features} onChange={set('features')} /></Field>
+            {edit.code === 'FREE' && (
+              <fieldset className="space-y-2 rounded-xl border border-sun-400 bg-amber-50/50 p-3"><legend className="px-1 text-sm font-semibold">Limite de cadastros gratuitos</legend>
+                <Input id="pl-maxusers" label="Máximo de pessoas com conta FREE (vazio = sem limite)" type="number" min={0} disabled={!isSuper} value={edit.maxUsers} onChange={set('maxUsers')} />
+                <p className="text-xs text-ink/70">Hoje há <b>{data.freeCapacity.used}</b> contas FREE (profissionais, empresas e clientes sem assinatura paga; contas suspensas não contam). Ao atingir o limite, novos cadastros são bloqueados; quem já tem conta continua entrando. {edit.maxUsers !== '' && Number(edit.maxUsers) < data.freeCapacity.used && <b className="text-red-700">O limite informado é menor que o total atual: os cadastros ficarão fechados.</b>}</p>
+                {!isSuper && <p className="text-xs font-semibold text-amber-900">Somente o superadministrador pode alterar este limite.</p>}
+              </fieldset>
+            )}
             <fieldset className="space-y-2 rounded-xl border border-brand-900/10 p-3"><legend className="px-1 text-sm font-semibold">Limites de uso (vazio = ilimitado)</legend>
               {LIMITS.map(([k, l]) => <Input key={k} id={`lim-${k}`} label={l} type="number" min={0} value={edit.limits[k]} onChange={(e) => setEdit({ ...edit, limits: { ...edit.limits, [k]: e.target.value } })} />)}
             </fieldset>

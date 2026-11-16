@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import { env } from '../../config/env.js';
 import { prisma } from '../../database/prisma.js';
 import { conflict, unauthorized } from '../../utils/errors.js';
+import { FREE_CAPACITY_LOCK, assertFreeCapacity } from '../plans/capacity.js';
 
 const BCRYPT_COST = env.NODE_ENV === 'test' ? 4 : 12;
 const REUSE_GRACE_MS = 10_000;
@@ -28,9 +29,19 @@ async function session(user) {
 
 export async function register({ name, email, password, role }) {
   if (await prisma.user.findUnique({ where: { email } })) throw conflict('E-mail já cadastrado');
-  const user = await prisma.user.create({
-    data: { name, email, role, passwordHash: await bcrypt.hash(password, BCRYPT_COST), consentAt: new Date() },
-  });
+  const passwordHash = await bcrypt.hash(password, BCRYPT_COST);
+  let user;
+  try {
+    // A verificação do limite de contas FREE e a criação ficam sob um lock: cadastros simultâneos nunca ultrapassam o teto.
+    user = await prisma.$transaction(async (tx) => {
+      await tx.$executeRaw`SELECT pg_advisory_xact_lock(${FREE_CAPACITY_LOCK})`;
+      await assertFreeCapacity(tx);
+      return tx.user.create({ data: { name, email, role, passwordHash, consentAt: new Date() } });
+    }, { maxWait: 10_000, timeout: 20_000 });
+  } catch (e) {
+    if (e.code === 'P2002') throw conflict('E-mail já cadastrado'); // cadastro simultâneo com o mesmo e-mail
+    throw e;
+  }
   return session(user);
 }
 

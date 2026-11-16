@@ -25,7 +25,7 @@ const PUBLIC = new Set([
   'GET /api/health', 'POST /api/auth/register', 'POST /api/auth/login', 'POST /api/auth/refresh', 'POST /api/auth/logout',
   'GET /api/categories', 'GET /api/professionals', 'GET /api/professionals/cities', 'GET /api/professionals/:slug',
   'GET /api/opportunities', 'GET /api/opportunities/cities', 'GET /api/opportunities/:id',
-  'GET /api/plans', 'POST /api/billing/webhook/asaas', 'GET /robots.txt', 'GET /sitemap.xml', 'GET /api/robots.txt', 'GET /api/sitemap.xml',
+  'GET /api/plans', 'GET /api/plans/capacity', 'POST /api/billing/webhook/asaas', 'GET /robots.txt', 'GET /sitemap.xml', 'GET /api/robots.txt', 'GET /api/sitemap.xml',
 ]);
 
 const call = (r) => api()[r.method.toLowerCase()](r.path.replace(/:\w+/g, '00000000-0000-4000-8000-000000000000')).send({});

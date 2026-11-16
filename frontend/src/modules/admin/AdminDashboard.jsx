@@ -54,6 +54,7 @@ export default function AdminDashboard() {
       <Card>
         <h2 className="mb-2 font-display text-lg font-bold">Assinaturas</h2>
         <p className="text-sm"><b>{data.subscriptions.activePaid}</b> assinatura(s) paga(s) ou concedida(s) ativa(s) · {Math.max(0, data.subscriptions.nonStaffUsers - data.subscriptions.activePaid)} usuário(s) no plano FREE.</p>
+        {data.freeCapacity && <p className="mt-1 text-sm">Vagas FREE: <b>{data.freeCapacity.used}</b>{data.freeCapacity.limited ? <> de <b>{data.freeCapacity.max}</b> ({data.freeCapacity.open ? `${data.freeCapacity.remaining} restantes` : 'cadastros fechados'})</> : ' · sem limite de cadastros'}.</p>}
         <Link to="/painel/assinaturas" className="mt-2 inline-block text-sm font-semibold text-brand-700 underline">Gerenciar assinaturas</Link>
       </Card>
     </div>
