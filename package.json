@@ -1,0 +1,12 @@
+{
+  "name": "chamalafree",
+  "private": true,
+  "description": "CHAMALÁFREE — monorepo (backend Express + frontend React). Deploy na Vercel: ver docs/DEPLOY.md",
+  "engines": { "node": "22.x" },
+  "scripts": {
+    "dev:api": "npm --prefix backend run dev",
+    "dev:web": "npm --prefix frontend run dev",
+    "test": "npm --prefix backend test",
+    "build": "sh scripts/vercel-build.sh"
+  }
+}

@@ -1,10 +1,14 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  // rhel-openssl-3.0.x = ambiente de funções da Vercel (AWS Lambda); native = máquina local
+  binaryTargets = ["native", "rhel-openssl-3.0.x"]
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url       = env("DATABASE_URL")
+  // Conexão DIRETA (sem pooler) usada pelas migrations. Em produção, DATABASE_URL aponta para o pooler.
+  directUrl = env("DIRECT_URL")
 }
 
 enum Role {

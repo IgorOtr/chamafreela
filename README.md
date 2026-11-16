@@ -23,6 +23,9 @@ Pendente da Fase 2: upload de arquivos do portfólio (hoje apenas links https) �
 ## Requisitos
 Node 22+ e Docker (PostgreSQL + PostGIS).
 
+## Deploy (Vercel)
+Projeto único na Vercel: frontend estático + API como função serverless na mesma origem, com PostgreSQL/PostGIS gerenciado. Passo a passo, variáveis e limitações em **[`docs/DEPLOY.md`](docs/DEPLOY.md)**. Pagamentos: [`docs/ASAAS.md`](docs/ASAAS.md). Segurança: [`docs/SEGURANCA.md`](docs/SEGURANCA.md).
+
 ## Instalação
 ```bash
 docker compose up -d                      # PostgreSQL/PostGIS na porta 5434

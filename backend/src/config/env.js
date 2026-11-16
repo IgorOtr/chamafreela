@@ -1,5 +1,8 @@
 import { z } from 'zod';
 
+// Em deploys de preview da Vercel, a origem padrão é a URL do próprio deploy (em produção defina SITE_URL e CORS_ORIGIN).
+const vercelOrigin = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined;
+
 const base = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
   PORT: z.coerce.number().default(3333),
@@ -7,14 +10,14 @@ const base = z.object({
   JWT_ACCESS_SECRET: z.string().min(32, 'JWT_ACCESS_SECRET deve ter ao menos 32 caracteres'),
   JWT_ACCESS_EXPIRES_IN: z.string().default('15m'),
   REFRESH_TOKEN_DAYS: z.coerce.number().default(7),
-  SITE_URL: z.string().url().default('http://localhost:5173'),
+  SITE_URL: z.string().url().default(vercelOrigin ?? 'http://localhost:5173'),
   BILLING_ENABLED: z.enum(['true', 'false']).default('false').transform((v) => v === 'true'),
   ENABLE_DOCS: z.enum(['true', 'false']).optional().transform((v) => (v === undefined ? undefined : v === 'true')),
   ASAAS_API_KEY: z.string().trim().min(10).optional(),
   ASAAS_ENV: z.enum(['sandbox', 'production']).default('sandbox'),
   ASAAS_BASE_URL: z.string().url().optional(),
   ASAAS_WEBHOOK_TOKEN: z.string().trim().min(32, 'ASAAS_WEBHOOK_TOKEN deve ter ao menos 32 caracteres').optional(),
-  CORS_ORIGIN: z.string().default('http://localhost:5173'),
+  CORS_ORIGIN: z.string().default(vercelOrigin ?? 'http://localhost:5173'),
   COOKIE_SECURE: z.enum(['true', 'false']).default('false').transform((v) => v === 'true'),
 });
 
