@@ -6,6 +6,7 @@ import { prisma } from '../../database/prisma.js';
 import { conflict, unauthorized } from '../../utils/errors.js';
 
 const BCRYPT_COST = env.NODE_ENV === 'test' ? 4 : 12;
+const REUSE_GRACE_MS = 10_000;
 const sha256 = (v) => crypto.createHash('sha256').update(v).digest('hex');
 
 export const publicUser = (u) => ({ id: u.id, name: u.name, email: u.email, role: u.role, status: u.status });
@@ -50,7 +51,11 @@ export async function refresh(token) {
   const record = await prisma.refreshToken.findUnique({ where: { tokenHash: sha256(token) }, include: { user: true } });
   if (!record) throw unauthorized('Sessão inválida');
   if (record.revokedAt) {
-    await prisma.refreshToken.updateMany({ where: { userId: record.userId, revokedAt: null }, data: { revokedAt: new Date() } });
+    // Reuso logo após a rotação costuma ser corrida legítima (abas/requisições simultâneas): só recusa.
+    // Reuso tardio indica token vazado: encerra todas as sessões do usuário.
+    if (Date.now() - record.revokedAt.getTime() > REUSE_GRACE_MS) {
+      await prisma.refreshToken.updateMany({ where: { userId: record.userId, revokedAt: null }, data: { revokedAt: new Date() } });
+    }
     throw unauthorized('Sessão inválida');
   }
   if (record.expiresAt < new Date() || record.user.status === 'SUSPENSO') throw unauthorized('Sessão expirada');

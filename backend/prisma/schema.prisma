@@ -39,6 +39,7 @@ model User {
   company       Company?
   dataRequests  DataRequest[]
   notifications Notification[]
+  simulations   Simulation[]
   notifyRecommendations Boolean @default(true)
 
   @@index([role, status])
@@ -371,4 +372,24 @@ model TerritorialIndicator {
 
   @@unique([municipalityCode, key, dimension, period])
   @@index([municipalityCode, key])
+}
+
+model Simulation {
+  id           String   @id @default(uuid())
+  userId       String
+  name         String
+  city         String?
+  activity     String?
+  inputs       Json
+  assumptions  Json
+  observed     Json
+  results      Json
+  modelVersion String
+  seed         Int
+  iterations   Int
+  createdAt    DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
 }

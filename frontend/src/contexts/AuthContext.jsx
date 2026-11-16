@@ -2,6 +2,9 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 import { api, setAccessToken, setSessionLostHandler } from '../services/api.js'
 
 const AuthContext = createContext(null)
+
+// Uma única chamada de refresh na inicialização (o StrictMode executa o efeito duas vezes em desenvolvimento).
+let initialRefresh = null
 export const useAuth = () => useContext(AuthContext)
 
 export function AuthProvider({ children }) {
@@ -16,7 +19,8 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     setSessionLostHandler(() => setUser(null))
-    api.post('/auth/refresh')
+    initialRefresh ??= api.post('/auth/refresh')
+    initialRefresh
       .then(({ data }) => start(data))
       .catch(() => {})
       .finally(() => setLoading(false))

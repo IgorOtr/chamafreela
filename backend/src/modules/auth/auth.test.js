@@ -57,16 +57,24 @@ describe('auth', () => {
     assert.equal((await api().get('/api/auth/me').set(bearer('lixo'))).status, 401);
   });
 
-  it('rotaciona o refresh token e invalida todas as sessões ao detectar reuso', async () => {
+  it('rotaciona o refresh token; reuso imediato só é recusado (corrida legítima), sem derrubar a sessão nova', async () => {
     const reg = await api().post('/api/auth/register').send(valid);
     const cookie1 = reg.headers['set-cookie'][0].split(';')[0];
     const r1 = await api().post('/api/auth/refresh').set('Cookie', cookie1);
     assert.equal(r1.status, 200);
     const cookie2 = r1.headers['set-cookie'][0].split(';')[0];
-    // reuso do token antigo
     assert.equal((await api().post('/api/auth/refresh').set('Cookie', cookie1)).status, 401);
-    // o novo também foi revogado por segurança
-    assert.equal((await api().post('/api/auth/refresh').set('Cookie', cookie2)).status, 401);
+    assert.equal((await api().post('/api/auth/refresh').set('Cookie', cookie2)).status, 200, 'sessão nova continua válida');
+  });
+
+  it('reuso tardio de token revogado (possível vazamento) encerra todas as sessões', async () => {
+    const reg = await api().post('/api/auth/register').send(valid);
+    const cookie1 = reg.headers['set-cookie'][0].split(';')[0];
+    const r1 = await api().post('/api/auth/refresh').set('Cookie', cookie1);
+    const cookie2 = r1.headers['set-cookie'][0].split(';')[0];
+    await prisma.refreshToken.updateMany({ where: { revokedAt: { not: null } }, data: { revokedAt: new Date(Date.now() - 60_000) } });
+    assert.equal((await api().post('/api/auth/refresh').set('Cookie', cookie1)).status, 401);
+    assert.equal((await api().post('/api/auth/refresh').set('Cookie', cookie2)).status, 401, 'todas as sessões foram revogadas');
   });
 
   it('refresh rejeita Origin diferente do permitido', async () => {
