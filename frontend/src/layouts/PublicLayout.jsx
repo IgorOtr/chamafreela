@@ -11,6 +11,7 @@ export default function PublicLayout() {
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
           <Logo />
           <nav className="flex items-center gap-2">
+            <Link to="/profissionais" className="hidden px-3 text-sm font-semibold text-brand-700 sm:block">Profissionais</Link>
             {user ? (
               <Link to="/painel"><Button>Meu painel</Button></Link>
             ) : (

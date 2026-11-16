@@ -17,11 +17,12 @@ export default function AdminDashboard() {
   return (
     <div className="space-y-6">
       <h1 className="font-display text-3xl font-extrabold">Painel administrativo <span className="text-base font-semibold text-ink/50">· {ROLE_LABEL[user.role]}</span></h1>
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <Stat label="Total de usuários" value={data.totalUsers} />
-        <Stat label="Profissionais" value={data.usersByRole.PROFISSIONAL ?? 0} />
+        <Stat label="Profissionais aprovados" value={data.professionalsByStatus.APROVADO ?? 0} />
+        <Stat label="Aguardando aprovação" value={data.professionalsByStatus.PENDENTE ?? 0} />
         <Stat label="Empresas" value={data.usersByRole.EMPRESA ?? 0} />
-        <Stat label="Categorias ativas" value={data.activeCategories} />
+        <Stat label="Solicitações LGPD abertas" value={data.openDataRequests} />
       </div>
       <Card>
         <h2 className="mb-4 font-display text-lg font-bold">Novos cadastros — últimos 30 dias</h2>
@@ -41,7 +42,13 @@ export default function AdminDashboard() {
           </div>
         )}
       </Card>
-      <p className="text-sm text-ink/60">Indicadores de profissionais pendentes, oportunidades e assinaturas serão exibidos quando esses módulos forem implementados.</p>
+      <Card>
+        <h2 className="mb-3 font-display text-lg font-bold">Categorias mais utilizadas</h2>
+        {data.topCategories.length === 0 ? <p className="text-sm text-ink/60">Ainda não há profissionais aprovados.</p> : (
+          <ul className="space-y-1.5 text-sm">{data.topCategories.map((c) => <li key={c.name} className="flex justify-between"><span>{c.name}</span><b>{c.count}</b></li>)}</ul>
+        )}
+      </Card>
+      <p className="text-sm text-ink/60">Indicadores de oportunidades e assinaturas serão exibidos quando esses módulos forem implementados.</p>
     </div>
   )
 }

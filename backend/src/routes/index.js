@@ -3,6 +3,8 @@ import adminRoutes from '../modules/admin/admin.routes.js';
 import auditRoutes from '../modules/audit/audit.routes.js';
 import authRoutes from '../modules/auth/auth.routes.js';
 import categoriesRoutes from '../modules/categories/categories.routes.js';
+import datarequestsRoutes from '../modules/datarequests/datarequests.routes.js';
+import professionalsRoutes from '../modules/professionals/professionals.routes.js';
 import usersRoutes from '../modules/users/users.routes.js';
 
 const router = Router();
@@ -12,4 +14,6 @@ router.use('/users', usersRoutes);
 router.use('/categories', categoriesRoutes);
 router.use('/admin', adminRoutes);
 router.use('/audit', auditRoutes);
+router.use('/professionals', professionalsRoutes);
+router.use('/data-requests', datarequestsRoutes);
 export default router;

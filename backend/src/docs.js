@@ -1,6 +1,6 @@
 export const openapi = {
   openapi: '3.0.3',
-  info: { title: 'CHAMALÁFREE API', version: '0.1.0', description: 'Fase 1 — Fundação: autenticação, RBAC, categorias, usuários, auditoria.' },
+  info: { title: 'CHAMALÁFREE API', version: '0.1.0', description: 'Fases 1–2: autenticação, RBAC, categorias, usuários, auditoria, marketplace de profissionais.' },
   servers: [{ url: '/api' }],
   components: { securitySchemes: { bearer: { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' } } },
   paths: {
@@ -19,6 +19,21 @@ export const openapi = {
     '/users': { get: { summary: 'Listar usuários (paginado)', security: [{ bearer: [] }], responses: { 200: { description: 'ok' } } } },
     '/users/{id}': { patch: { summary: 'Alterar papel/status', security: [{ bearer: [] }], responses: { 200: { description: 'ok' } } } },
     '/admin/dashboard': { get: { summary: 'Indicadores do painel administrativo', security: [{ bearer: [] }], responses: { 200: { description: 'ok' } } } },
+    '/professionals': { get: { summary: 'Catálogo público (q, category, city, neighborhood, page)', responses: { 200: { description: 'ok' } } } },
+    '/professionals/cities': { get: { summary: 'Cidades com profissionais aprovados', responses: { 200: { description: 'ok' } } } },
+    '/professionals/{slug}': { get: { summary: 'Perfil público (somente aprovados)', responses: { 200: { description: 'ok' }, 404: { description: 'Não encontrado' } } } },
+    '/professionals/me': {
+      get: { summary: 'Meu perfil profissional', security: [{ bearer: [] }], responses: { 200: { description: 'ok' }, 404: { description: 'Sem perfil' } } },
+      put: { summary: 'Criar/atualizar meu perfil (novo perfil entra como PENDENTE)', security: [{ bearer: [] }], responses: { 200: { description: 'ok' }, 400: { description: 'Dados inválidos' } } },
+    },
+    '/professionals/admin/list': { get: { summary: 'Fila administrativa de perfis (status, q)', security: [{ bearer: [] }], responses: { 200: { description: 'ok' } } } },
+    '/professionals/admin/{id}/review': { post: { summary: 'APROVAR | REJEITAR | OCULTAR | REEXIBIR', security: [{ bearer: [] }], responses: { 200: { description: 'ok' } } } },
+    '/professionals/admin/{id}': { patch: { summary: 'Editar informações públicas / destacar', security: [{ bearer: [] }], responses: { 200: { description: 'ok' } } } },
+    '/data-requests': {
+      post: { summary: 'Solicitar atualização/exclusão de dados (LGPD)', security: [{ bearer: [] }], responses: { 201: { description: 'ok' } } },
+      get: { summary: 'Listar solicitações (admin)', security: [{ bearer: [] }], responses: { 200: { description: 'ok' } } },
+    },
+    '/data-requests/{id}/resolve': { post: { summary: 'Concluir solicitação (admin)', security: [{ bearer: [] }], responses: { 200: { description: 'ok' } } } },
     '/audit': { get: { summary: 'Registros de auditoria', security: [{ bearer: [] }], responses: { 200: { description: 'ok' } } } },
   },
 };

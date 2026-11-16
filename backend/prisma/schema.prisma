@@ -35,6 +35,8 @@ model User {
 
   refreshTokens RefreshToken[]
   auditLogs     AuditLog[]
+  professional  Professional?
+  dataRequests  DataRequest[]
 
   @@index([role, status])
 }
@@ -60,6 +62,8 @@ model Category {
   active      Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  professionals Professional[]
 }
 
 model AuditLog {
@@ -77,4 +81,123 @@ model AuditLog {
   @@index([entity, entityId])
   @@index([actorId])
   @@index([createdAt])
+}
+
+enum ProfessionalStatus {
+  PENDENTE
+  APROVADO
+  REJEITADO
+  OCULTO
+}
+
+enum AttendanceMode {
+  PRESENCIAL
+  REMOTO
+  HIBRIDO
+}
+
+enum MediaType {
+  IMAGEM
+  VIDEO
+}
+
+model Professional {
+  id             String             @id @default(uuid())
+  userId         String             @unique
+  slug           String             @unique
+  displayName    String
+  categoryId     String
+  headline       String?
+  description    String
+  city           String
+  neighborhood   String?
+  mode           AttendanceMode     @default(PRESENCIAL)
+  radiusKm       Int                @default(10)
+  whatsapp       String
+  showContact    Boolean            @default(false)
+  otherContacts  String?
+  experience     String?
+  qualifications String?
+  available      Boolean            @default(true)
+  preferences    String?
+  status         ProfessionalStatus @default(PENDENTE)
+  rejectionReason String?
+  featured       Boolean            @default(false)
+  approvedAt     DateTime?
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+
+  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category  Category        @relation(fields: [categoryId], references: [id])
+  services  Service[]
+  areas     ServiceArea[]
+  portfolio PortfolioItem[]
+
+  @@index([status, featured])
+  @@index([categoryId])
+  @@index([city])
+}
+
+model Service {
+  id             String   @id @default(uuid())
+  professionalId String
+  name           String
+  description    String?
+  priceInfo      String?
+  professional   Professional @relation(fields: [professionalId], references: [id], onDelete: Cascade)
+
+  @@index([professionalId])
+  @@index([name])
+}
+
+model ServiceArea {
+  id             String  @id @default(uuid())
+  professionalId String
+  city           String
+  neighborhood   String?
+  radiusKm       Int     @default(10)
+  lat            Float?
+  lng            Float?
+  // Coluna gerada (PostGIS) a partir de lat/lng — ver migration. Usada nas consultas espaciais.
+  location       Unsupported("geography(Point,4326)")?
+
+  professional Professional @relation(fields: [professionalId], references: [id], onDelete: Cascade)
+
+  @@index([professionalId])
+  @@index([city])
+}
+
+model PortfolioItem {
+  id             String    @id @default(uuid())
+  professionalId String
+  type           MediaType @default(IMAGEM)
+  url            String
+  caption        String?
+  position       Int       @default(0)
+  professional   Professional @relation(fields: [professionalId], references: [id], onDelete: Cascade)
+
+  @@index([professionalId])
+}
+
+enum DataRequestType {
+  ATUALIZACAO
+  EXCLUSAO
+}
+
+enum DataRequestStatus {
+  ABERTA
+  CONCLUIDA
+}
+
+model DataRequest {
+  id        String            @id @default(uuid())
+  userId    String
+  type      DataRequestType
+  message   String?
+  status    DataRequestStatus @default(ABERTA)
+  createdAt DateTime          @default(now())
+  resolvedAt DateTime?
+  user      User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([status])
 }

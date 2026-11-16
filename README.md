@@ -3,8 +3,12 @@
 *Transformando talento em oportunidade.* Plataforma que conecta autônomos, empresas e clientes (início: Volta Redonda/RJ).
 Especificação completa em [`claude.md`](claude.md); arquitetura em [`docs/ARQUITETURA.md`](docs/ARQUITETURA.md).
 
-## Estado atual — Fase 1 (Fundação)
-Autenticação (JWT + refresh rotativo em cookie httpOnly), RBAC no backend, categorias, gestão de usuários, auditoria, dashboard administrativo, layout e identidade visual.
+## Estado atual
+**Fase 1 — Fundação:** autenticação (JWT + refresh rotativo em cookie httpOnly), RBAC no backend, categorias, usuários, auditoria, dashboard e identidade visual.
+
+**Fase 2 — Marketplace:** perfil profissional (serviços, regiões atendidas com coluna PostGIS gerada, portfólio por links), aprovação/rejeição/ocultação/destaque pela administração com histórico, catálogo público com busca e filtros (nome, serviço, categoria, cidade, bairro, região atendida), contato público somente com autorização e solicitações LGPD de atualização/exclusão.
+
+Pendente da fase: upload de arquivos do portfólio (hoje apenas links https) — depende da escolha do armazenamento S3-compatível.
 
 ## Requisitos
 Node 22+ e Docker (PostgreSQL + PostGIS).

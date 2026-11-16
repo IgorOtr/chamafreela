@@ -19,7 +19,8 @@ export default function Home() {
             <p className="mt-5 max-w-xl text-lg text-white/80">Conectamos autônomos, microempreendedores, clientes e empresas — com dados, mapa e ferramentas para quem quer trabalhar e empreender.</p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link to="/cadastro"><Button variant="accent" className="px-6 py-3 text-base">Quero me cadastrar</Button></Link>
-              <Link to="/entrar"><Button variant="outline" className="px-6 py-3 text-base">Já tenho conta</Button></Link>
+              <Link to="/profissionais"><Button variant="outline" className="px-6 py-3 text-base">Ver profissionais</Button></Link>
+              <Link to="/entrar"><Button variant="ghost" className="px-6 py-3 text-base text-white hover:bg-white/10" >Já tenho conta</Button></Link>
             </div>
           </div>
           <div aria-hidden className="hidden items-center justify-center md:flex">

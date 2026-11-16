@@ -1,4 +1,4 @@
-import { LayoutDashboard, LogOut, Menu, ScrollText, Tags, Users, X } from 'lucide-react'
+import { LayoutDashboard, LogOut, Menu, ScrollText, Search, ShieldCheck, Tags, UserCheck, UserCircle, Users, X } from 'lucide-react'
 import { useState } from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import Logo from '../components/Logo.jsx'
@@ -8,10 +8,16 @@ import { ROLE_LABEL, isStaff } from '../utils/roles.js'
 const staffNav = [
   { to: '/painel', label: 'Dashboard', icon: LayoutDashboard, end: true },
   { to: '/painel/usuarios', label: 'Usuários', icon: Users, roles: ['SUPERADMIN', 'ADMIN', 'MODERADOR'] },
+  { to: '/painel/profissionais', label: 'Profissionais', icon: UserCheck, roles: ['SUPERADMIN', 'ADMIN', 'MODERADOR'] },
   { to: '/painel/categorias', label: 'Categorias', icon: Tags, roles: ['SUPERADMIN', 'ADMIN'] },
+  { to: '/painel/solicitacoes', label: 'Solicitações LGPD', icon: ShieldCheck, roles: ['SUPERADMIN', 'ADMIN'] },
   { to: '/painel/auditoria', label: 'Auditoria', icon: ScrollText, roles: ['SUPERADMIN', 'ADMIN'] },
 ]
-const userNav = [{ to: '/painel', label: 'Dashboard', icon: LayoutDashboard, end: true }]
+const userNav = [
+  { to: '/painel', label: 'Dashboard', icon: LayoutDashboard, end: true },
+  { to: '/painel/meu-perfil', label: 'Meu perfil', icon: UserCircle, roles: ['PROFISSIONAL'] },
+  { to: '/profissionais', label: 'Catálogo', icon: Search },
+]
 
 export default function DashboardLayout() {
   const { user, logout } = useAuth()

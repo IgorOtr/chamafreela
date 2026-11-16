@@ -7,12 +7,15 @@ const ADMIN_BASE = [
   'users:update',
   'categories:manage',
   'audit:read',
+  'professionals:moderate',
+  'professionals:manage',
+  'datarequests:manage',
 ];
 
 export const PERMISSIONS = {
   SUPERADMIN: ['*'],
   ADMIN: [...ADMIN_BASE],
-  MODERADOR: ['admin:dashboard', 'users:read', 'moderation:manage'],
+  MODERADOR: ['admin:dashboard', 'users:read', 'professionals:moderate'],
   PROFISSIONAL: ['profile:own'],
   EMPRESA: ['company:own'],
   CLIENTE: ['profile:own'],
