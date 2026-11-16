@@ -34,6 +34,7 @@ export const openapi = {
       get: { summary: 'Listar solicitações (admin)', security: [{ bearer: [] }], responses: { 200: { description: 'ok' } } },
     },
     '/data-requests/{id}/resolve': { post: { summary: 'Concluir solicitação (admin)', security: [{ bearer: [] }], responses: { 200: { description: 'ok' } } } },
+    '/privacy/export': { get: { summary: 'Exporta todos os dados do próprio titular (JSON)', security: [{ bearer: [] }], responses: { 200: { description: 'Arquivo JSON' } } } },
     '/audit': { get: { summary: 'Registros de auditoria', security: [{ bearer: [] }], responses: { 200: { description: 'ok' } } } },
   },
 };

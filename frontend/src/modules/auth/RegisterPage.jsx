@@ -43,7 +43,7 @@ export default function RegisterPage() {
           <Input id="password" label="Senha (mín. 8, com letras e números)" type="password" autoComplete="new-password" required minLength={8} value={form.password} onChange={set('password')} />
           <label className="flex items-start gap-2 text-sm">
             <input type="checkbox" className="mt-1" checked={form.consent} onChange={set('consent')} required />
-            <span>Li e aceito a Política de Privacidade e autorizo o tratamento dos meus dados para uso da plataforma (LGPD).</span>
+            <span>Li e aceito a <Link to="/privacidade" target="_blank" rel="noopener" className="font-semibold text-brand-700 underline">Política de Privacidade</Link> e autorizo o tratamento dos meus dados para uso da plataforma (LGPD).</span>
           </label>
           {error && <p role="alert" className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-800">{error}</p>}
           <Button type="submit" loading={loading} className="w-full">Criar conta</Button>

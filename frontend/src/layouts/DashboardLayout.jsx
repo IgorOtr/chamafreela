@@ -1,4 +1,4 @@
-import { LineChart as InsightsIcon, Palette, Map as MapIcon, Sparkles, SlidersHorizontal, Briefcase, Building2, ClipboardCheck, HeartHandshake, LayoutDashboard, LogOut, Menu, ScrollText, Search, ShieldCheck, Tags, UserCheck, UserCircle, Users, X } from 'lucide-react'
+import { LineChart as InsightsIcon, ShieldCheck as PrivacyIcon, Palette, Map as MapIcon, Sparkles, SlidersHorizontal, Briefcase, Building2, ClipboardCheck, HeartHandshake, LayoutDashboard, LogOut, Menu, ScrollText, Search, ShieldCheck, Tags, UserCheck, UserCircle, Users, X } from 'lucide-react'
 import { useState } from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import Logo from '../components/Logo.jsx'
@@ -17,6 +17,7 @@ const staffNav = [
   { to: '/painel/categorias', label: 'Categorias', icon: Tags, roles: ['SUPERADMIN', 'ADMIN'] },
   { to: '/painel/solicitacoes', label: 'Solicitações LGPD', icon: ShieldCheck, roles: ['SUPERADMIN', 'ADMIN'] },
   { to: '/painel/auditoria', label: 'Auditoria', icon: ScrollText, roles: ['SUPERADMIN', 'ADMIN'] },
+  { to: '/painel/privacidade', label: 'Privacidade e dados', icon: PrivacyIcon },
 ]
 const userNav = [
   { to: '/painel', label: 'Dashboard', icon: LayoutDashboard, end: true },
@@ -30,6 +31,7 @@ const userNav = [
   { to: '/painel/oportunidades', label: 'Minhas oportunidades', icon: Briefcase, roles: ['EMPRESA'] },
   { to: '/oportunidades', label: 'Oportunidades abertas', icon: Search, roles: ['PROFISSIONAL', 'CLIENTE'] },
   { to: '/profissionais', label: 'Catálogo', icon: Search },
+  { to: '/painel/privacidade', label: 'Privacidade e dados', icon: PrivacyIcon },
 ]
 
 export default function DashboardLayout() {

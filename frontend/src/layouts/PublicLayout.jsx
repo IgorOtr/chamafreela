@@ -45,7 +45,7 @@ export default function PublicLayout() {
           <nav aria-label="Plataforma"><h2 className="mb-3 font-display text-sm font-bold uppercase tracking-wide text-ink/60">Plataforma</h2>
             <ul className="space-y-2 text-sm">{NAV.map(([to, label]) => <li key={to}><Link className="hover:underline" to={to}>{label}</Link></li>)}</ul></nav>
           <nav aria-label="Sua conta"><h2 className="mb-3 font-display text-sm font-bold uppercase tracking-wide text-ink/60">Sua conta</h2>
-            <ul className="space-y-2 text-sm"><li><Link className="hover:underline" to="/cadastro">Criar conta grátis</Link></li><li><Link className="hover:underline" to="/entrar">Entrar</Link></li></ul></nav>
+            <ul className="space-y-2 text-sm"><li><Link className="hover:underline" to="/cadastro">Criar conta grátis</Link></li><li><Link className="hover:underline" to="/entrar">Entrar</Link></li><li><Link className="hover:underline" to="/privacidade">Política de Privacidade</Link></li></ul></nav>
         </div>
         <p className="border-t border-brand-900/10 py-4 text-center text-xs text-ink/60">© {new Date().getFullYear()} CHAMALÁFREE. Atendimento inicial em Volta Redonda/RJ, com expansão gradual para o Sul Fluminense.</p>
       </footer>

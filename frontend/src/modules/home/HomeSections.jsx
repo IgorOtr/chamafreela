@@ -180,7 +180,7 @@ export function Trust() {
       <div className={wrap}>
         <div className="mx-auto mb-10 max-w-3xl text-center">
           <h2 id="trust-title" className="font-display text-3xl font-extrabold leading-tight md:text-4xl">Confiança, segurança e privacidade em primeiro lugar</h2>
-          <p className="mt-3 text-white/75">Cuidamos dos seus dados e do que é publicado na plataforma, em linha com a LGPD.</p>
+          <p className="mt-3 text-white/75">Cuidamos dos seus dados e do que é publicado na plataforma, em linha com a LGPD. <Link to="/privacidade" className="font-semibold text-sun-400 underline">Leia a Política de Privacidade</Link>.</p>
         </div>
         <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {TRUST.map(([t, d]) => (

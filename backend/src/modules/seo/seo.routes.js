@@ -19,7 +19,7 @@ router.get('/sitemap.xml', asyncHandler(async (_req, res) => {
   ]);
   const urls = [
     { loc: '/', priority: '1.0', changefreq: 'daily' }, { loc: '/profissionais', priority: '0.9', changefreq: 'daily' },
-    { loc: '/oportunidades', priority: '0.9', changefreq: 'daily' }, { loc: '/planos', priority: '0.7', changefreq: 'monthly' },
+    { loc: '/oportunidades', priority: '0.9', changefreq: 'daily' }, { loc: '/planos', priority: '0.7', changefreq: 'monthly' }, { loc: '/privacidade', priority: '0.3', changefreq: 'yearly' },
     ...pros.map((p) => ({ loc: `/profissionais/${p.slug}`, lastmod: p.updatedAt, priority: '0.6', changefreq: 'weekly' })),
     ...opps.map((o) => ({ loc: `/oportunidades/${o.id}`, lastmod: o.updatedAt, priority: '0.6', changefreq: 'daily' })),
   ];

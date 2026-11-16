@@ -16,6 +16,7 @@ import NotificationsPage from '../pages/NotificationsPage.jsx'
 import HistoryPage from '../modules/insights/HistoryPage.jsx'
 import InsightsPage from '../modules/insights/InsightsPage.jsx'
 import SimulationResultPage from '../modules/insights/SimulationResultPage.jsx'
+import PrivacyCenterPage from '../modules/legal/PrivacyCenterPage.jsx'
 import StudioPage from '../modules/studio/StudioPage.jsx'
 import MapPage from '../modules/territorial/MapPage.jsx'
 import MyInterestsPage from '../modules/professionals/MyInterestsPage.jsx'
@@ -27,6 +28,7 @@ import UsersPage from '../modules/admin/UsersPage.jsx'
 import LoginPage from '../modules/auth/LoginPage.jsx'
 import RegisterPage from '../modules/auth/RegisterPage.jsx'
 import MyProfilePage from '../modules/professionals/MyProfilePage.jsx'
+import PrivacyPolicy from '../pages/PrivacyPolicy.jsx'
 import PlansPage from '../pages/PlansPage.jsx'
 import Catalog from '../pages/Catalog.jsx'
 import ProfessionalPublic from '../pages/ProfessionalPublic.jsx'
@@ -59,6 +61,7 @@ export default function AppRoutes() {
       <Route element={<PublicLayout />}>
         <Route index element={<Home />} />
         <Route path="planos" element={<PlansPage />} />
+        <Route path="privacidade" element={<PrivacyPolicy />} />
         <Route path="profissionais" element={<Catalog />} />
         <Route path="profissionais/:slug" element={<ProfessionalPublic />} />
         <Route path="oportunidades" element={<Opportunities />} />
@@ -78,6 +81,7 @@ export default function AppRoutes() {
         <Route path="insights/:id" element={<SimulationResultPage />} />
         <Route path="studio" element={<RequireAuth roles={['PROFISSIONAL', 'EMPRESA']}><StudioPage /></RequireAuth>} />
         <Route path="mapa" element={<MapPage />} />
+        <Route path="privacidade" element={<PrivacyCenterPage />} />
         <Route path="notificacoes" element={<NotificationsPage />} />
         <Route path="empresa" element={<RequireAuth roles={['EMPRESA']}><CompanyProfilePage /></RequireAuth>} />
         <Route path="oportunidades" element={<RequireAuth roles={['EMPRESA', 'SUPERADMIN', 'ADMIN', 'MODERADOR']}><OpportunitiesPanel /></RequireAuth>} />
