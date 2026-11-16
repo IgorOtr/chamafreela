@@ -15,6 +15,18 @@ Como o frontend e a API respondem **na mesma origem**, o cookie de sessão (`Htt
 
 Arquivos de configuração: [`vercel.json`](../vercel.json) (build, rewrites, região `gru1`, cabeçalhos de segurança/CSP do frontend), [`api/index.mjs`](../api/index.mjs) (entrada da função), [`scripts/vercel-build.sh`](../scripts/vercel-build.sh) (Prisma, migrations em produção, build do frontend).
 
+## Usando a CLI da Vercel
+```bash
+npm i -g vercel && vercel login
+vercel link --project chamalafree --scope <time>   # vincula (ou cria) o projeto
+vercel env add NOME --environment production       # variáveis (segredos: use --sensitive e cole no terminal)
+vercel deploy --scope <time>                       # preview (build remoto na Vercel)
+vercel deploy --prod --scope <time>                # produção
+```
+- **Faça o build na Vercel** (`vercel deploy`, sem `--prebuilt`): o build local em Mac ARM gera função `arm64`; por isso o schema inclui os alvos do Prisma `rhel-openssl-3.0.x` e `linux-arm64-openssl-3.0.x`.
+- Se `vercel link` reclamar que `functions`/`buildCommand` não podem ser usados com `services` (a CLI detecta frontend+backend como "serviços"), mova o `vercel.json` temporariamente, rode o `link` e devolva o arquivo. Depois do projeto vinculado, `vercel build` e `vercel deploy` usam o `vercel.json` normalmente (validado).
+- Conectar o repositório do GitHub (deploys automáticos a cada push) exige instalar/autorizar o app da Vercel no GitHub para o repositório.
+
 ## Pré-requisitos
 - Conta na Vercel e o repositório no GitHub. **O plano Hobby da Vercel é restrito a uso não comercial; como o produto tem monetização, planeje o plano Pro (confirme nos termos atuais).**
 - Banco **PostgreSQL com PostGIS**. Recomendado: **Neon** (disponível pelo Marketplace da Vercel, região São Paulo); alternativa: Supabase. Confirme que o provedor permite `CREATE EXTENSION postgis` (a primeira migration executa esse comando).
