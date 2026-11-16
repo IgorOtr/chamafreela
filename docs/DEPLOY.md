@@ -25,6 +25,9 @@ vercel deploy --prod --scope <time>                # produção
 ```
 - **Faça o build na Vercel** (`vercel deploy`, sem `--prebuilt`): o build local em Mac ARM gera função `arm64`; por isso o schema inclui os alvos do Prisma `rhel-openssl-3.0.x` e `linux-arm64-openssl-3.0.x`.
 - Se `vercel link` reclamar que `functions`/`buildCommand` não podem ser usados com `services` (a CLI detecta frontend+backend como "serviços"), mova o `vercel.json` temporariamente, rode o `link` e devolva o arquivo. Depois do projeto vinculado, `vercel build` e `vercel deploy` usam o `vercel.json` normalmente (validado).
+- **O primeiro `vercel deploy` de um projeto novo vai para produção** (comportamento da Vercel), mesmo sem `--prod`. Os seguintes são previews.
+- Projetos novos vêm com **Deployment Protection** (login da Vercel) ativa: só quem tem acesso ao time abre o site; para testar por linha de comando use `vercel curl`. Desative em *Settings → Deployment Protection* só quando for o go-live.
+- Em produção, defina `SITE_URL` e `CORS_ORIGIN` com a URL final: a origem padrão (`VERCEL_URL`) é a de cada deploy, não a do domínio.
 - Conectar o repositório do GitHub (deploys automáticos a cada push) exige instalar/autorizar o app da Vercel no GitHub para o repositório.
 
 ## Pré-requisitos
