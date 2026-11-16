@@ -443,3 +443,20 @@ model MarketingAsset {
 
   @@index([userId, type, createdAt])
 }
+
+model Plan {
+  id              String   @id @default(uuid())
+  code            String   @unique
+  name            String
+  tagline         String
+  priceCents      Int      @default(0)
+  promoPriceCents Int?
+  promoMonths     Int?
+  promoNote       String?
+  features        Json
+  available       Boolean  @default(false)
+  highlighted     Boolean  @default(false)
+  active          Boolean  @default(true)
+  position        Int      @default(0)
+  updatedAt       DateTime @updatedAt
+}

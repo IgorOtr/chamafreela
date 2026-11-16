@@ -3,10 +3,12 @@ import { Link, useParams } from 'react-router-dom'
 import { Badge, Button, Card, EmptyState, Spinner } from '../components/ui.jsx'
 import { useFetch } from '../hooks/useFetch.js'
 import { MODE_LABEL, whatsappLink } from '../utils/roles.js'
+import useSeo from '../hooks/useSeo.js'
 
 export default function ProfessionalPublic() {
   const { slug } = useParams()
   const { data: p, loading, error } = useFetch(`/professionals/${slug}`)
+  useSeo({ title: p ? `${p.displayName} — ${p.category.name} em ${p.city}` : 'Profissional', description: p ? (p.headline || p.description).slice(0, 155) : undefined, path: `/profissionais/${slug}`, noindex: !!error })
   if (loading) return <Spinner />
   if (error) return <EmptyState title="Perfil não encontrado">Este perfil não existe ou não está disponível. <Link to="/profissionais" className="font-semibold text-brand-700 underline">Ver catálogo</Link></EmptyState>
 

@@ -3,9 +3,11 @@ import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { Button, Card, Input } from '../../components/ui.jsx'
 import { useAuth } from '../../contexts/AuthContext.jsx'
 import { errorMessage } from '../../services/api.js'
+import useSeo from '../../hooks/useSeo.js'
 
 export default function LoginPage() {
   const { user, login } = useAuth()
+  useSeo({ title: 'Entrar', noindex: true, path: '/entrar' })
   const navigate = useNavigate()
   const [form, setForm] = useState({ email: '', password: '' })
   const [error, setError] = useState('')

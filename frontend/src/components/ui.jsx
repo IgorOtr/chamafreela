@@ -6,6 +6,8 @@ const variants = {
   ghost: 'bg-transparent text-brand-700 hover:bg-brand-50',
   danger: 'bg-red-600 text-white hover:bg-red-700',
   outline: 'border border-brand-700/20 bg-white text-brand-900 hover:bg-brand-50',
+  onDark: 'border border-white/40 bg-transparent text-white hover:bg-white/10',
+  ghostOnDark: 'bg-transparent text-white hover:bg-white/10',
 }
 
 export function Button({ variant = 'primary', loading, className = '', children, ...props }) {
@@ -13,7 +15,7 @@ export function Button({ variant = 'primary', loading, className = '', children,
     <button
       {...props}
       disabled={loading || props.disabled}
-      className={`inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-60 ${variants[variant]} ${className}`}
+      className={`inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl px-4 py-2.5 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-60 ${variants[variant]} ${className}`}
     >
       {loading && <Loader2 className="size-4 animate-spin" />}
       {children}

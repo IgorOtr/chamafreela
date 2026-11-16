@@ -1,11 +1,13 @@
 import { Search, SearchX } from 'lucide-react'
 import { useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
+import useSeo from '../hooks/useSeo.js'
 import ProfessionalCard from '../components/ProfessionalCard.jsx'
 import { EmptyState, Pagination, Spinner, inputClass } from '../components/ui.jsx'
 import { useFetch } from '../hooks/useFetch.js'
 
 export default function Catalog() {
+  useSeo({ title: 'Profissionais autônomos em Volta Redonda', description: 'Encontre eletricista, encanador, diarista, pintor, fotógrafo e outros profissionais autônomos e MEIs aprovados em Volta Redonda e região.', path: '/profissionais' })
   const [sp, setSp] = useSearchParams()
   const [q, setQ] = useState(sp.get('q') ?? '')
   const filters = { q: sp.get('q') ?? '', category: sp.get('category') ?? '', city: sp.get('city') ?? '', neighborhood: sp.get('neighborhood') ?? '' }

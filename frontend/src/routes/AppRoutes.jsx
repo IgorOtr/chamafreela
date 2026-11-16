@@ -27,6 +27,7 @@ import UsersPage from '../modules/admin/UsersPage.jsx'
 import LoginPage from '../modules/auth/LoginPage.jsx'
 import RegisterPage from '../modules/auth/RegisterPage.jsx'
 import MyProfilePage from '../modules/professionals/MyProfilePage.jsx'
+import PlansPage from '../pages/PlansPage.jsx'
 import Catalog from '../pages/Catalog.jsx'
 import ProfessionalPublic from '../pages/ProfessionalPublic.jsx'
 import Home from '../pages/Home.jsx'
@@ -57,6 +58,7 @@ export default function AppRoutes() {
     <Routes>
       <Route element={<PublicLayout />}>
         <Route index element={<Home />} />
+        <Route path="planos" element={<PlansPage />} />
         <Route path="profissionais" element={<Catalog />} />
         <Route path="profissionais/:slug" element={<ProfessionalPublic />} />
         <Route path="oportunidades" element={<Opportunities />} />

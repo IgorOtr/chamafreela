@@ -6,6 +6,7 @@ import { useAuth } from '../contexts/AuthContext.jsx'
 import { useToast } from '../contexts/ToastContext.jsx'
 import { useFetch } from '../hooks/useFetch.js'
 import { api, errorMessage } from '../services/api.js'
+import useSeo from '../hooks/useSeo.js'
 import { CONTRACT_LABEL, MODE_LABEL, formatDate, formatPay } from '../utils/roles.js'
 
 export default function OpportunityDetail() {
@@ -13,6 +14,7 @@ export default function OpportunityDetail() {
   const { user } = useAuth()
   const toast = useToast()
   const { data: o, loading, error, reload } = useFetch(`/opportunities/${id}`)
+  useSeo({ title: o ? `${o.title} — ${o.company.tradeName}` : 'Oportunidade', description: o ? o.description.slice(0, 155) : undefined, path: `/oportunidades/${id}`, noindex: !!error })
   const [message, setMessage] = useState('')
   const [busy, setBusy] = useState(false)
 

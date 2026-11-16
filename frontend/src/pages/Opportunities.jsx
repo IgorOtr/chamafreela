@@ -1,12 +1,14 @@
 import { Search, SearchX } from 'lucide-react'
 import { useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
+import useSeo from '../hooks/useSeo.js'
 import OpportunityCard from '../components/OpportunityCard.jsx'
 import { EmptyState, Pagination, Spinner, inputClass } from '../components/ui.jsx'
 import { useFetch } from '../hooks/useFetch.js'
 import { CONTRACT_LABEL } from '../utils/roles.js'
 
 export default function Opportunities() {
+  useSeo({ title: 'Oportunidades de trabalho e serviços', description: 'Demandas reais de empresas e clientes em Volta Redonda e região, aprovadas pela moderação. Veja as oportunidades abertas e manifeste interesse.', path: '/oportunidades' })
   const [sp, setSp] = useSearchParams()
   const [q, setQ] = useState(sp.get('q') ?? '')
   const filters = { q: sp.get('q') ?? '', category: sp.get('category') ?? '', city: sp.get('city') ?? '', contractType: sp.get('contractType') ?? '' }

@@ -3,6 +3,7 @@ import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { Button, Card, Field, Input, inputClass } from '../../components/ui.jsx'
 import { useAuth } from '../../contexts/AuthContext.jsx'
 import { errorMessage } from '../../services/api.js'
+import useSeo from '../../hooks/useSeo.js'
 
 const ROLES = [
   { value: 'PROFISSIONAL', label: 'Sou profissional / autônomo' },
@@ -12,6 +13,7 @@ const ROLES = [
 
 export default function RegisterPage() {
   const { user, register } = useAuth()
+  useSeo({ title: 'Criar conta grátis', description: 'Crie sua conta gratuita no CHAMALÁFREE como profissional, empresa ou cliente.', path: '/cadastro' })
   const navigate = useNavigate()
   const [form, setForm] = useState({ name: '', email: '', password: '', role: 'PROFISSIONAL', consent: false })
   const [error, setError] = useState('')

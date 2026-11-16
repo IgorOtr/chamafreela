@@ -9,6 +9,7 @@ import { openapi } from './docs.js';
 import { errorHandler, notFoundHandler } from './middlewares/errorHandler.js';
 import { globalLimiter } from './middlewares/rateLimit.js';
 import routes from './routes/index.js';
+import seoRoutes from './modules/seo/seo.routes.js';
 
 export const app = express();
 app.set('trust proxy', 1);
@@ -19,6 +20,7 @@ app.use(cookieParser());
 if (env.NODE_ENV !== 'test') app.use(morgan('tiny'));
 app.use('/api', globalLimiter);
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(openapi));
+app.use(seoRoutes); // /sitemap.xml e /robots.txt na raiz
 app.use('/api', routes);
 app.use(notFoundHandler);
 app.use(errorHandler);

@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs';
 import { PrismaClient } from '@prisma/client';
+import { seedPlans } from '../src/modules/plans/defaults.js';
 
 const prisma = new PrismaClient();
 
@@ -24,5 +25,7 @@ for (const name of CATEGORIAS) {
   await prisma.category.upsert({ where: { slug: slugify(name) }, update: {}, create: { name, slug: slugify(name) } });
 }
 
-console.log(`Seed concluído: superadmin ${email} e ${CATEGORIAS.length} categorias.`);
+await seedPlans(prisma);
+
+console.log(`Seed concluído: superadmin ${email}, ${CATEGORIAS.length} categorias e planos.`);
 await prisma.$disconnect();

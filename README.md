@@ -57,3 +57,9 @@ Definidos em `backend/src/config/permissions.js` e verificados em cada rota. SUP
 
 ## Migrations e a coluna PostGIS
 `ServiceArea.location` é uma coluna **gerada** (PostGIS). O `prisma migrate dev` tenta alterá-la (`DROP INDEX ServiceArea_location_idx` e `ALTER COLUMN location DROP DEFAULT`). Ao criar migrations, use `--create-only` e **remova essas linhas** antes de aplicar.
+
+## Home, planos e SEO
+- A home tem 8 seções (hero com busca, como funciona, para quem é, ferramentas, explorar, planos, confiança e privacidade, FAQ com chamada final) em `frontend/src/modules/home/`. Os textos estão em `content.js`; o FAQ alimenta também o JSON-LD `FAQPage`.
+- Planos vêm do banco (`Plan`, rota pública `GET /api/plans`), alimentados pelo seed com FREE (grátis) e PRO (R$ 14,90; oferta de lançamento R$ 9,99 por 3 meses). **O PRO está com `available=false`: não há cobrança ativa.** A edição pelo painel administrativo entra na Fase 9.
+- SEO: `useSeo` define título, descrição, canonical, Open Graph e JSON-LD por página; `index.html` traz metadados padrão, `og-image.png` e fallback `<noscript>`; o backend serve `/sitemap.xml` (só perfis aprovados e oportunidades vigentes) e `/robots.txt` (bloqueia `/painel`, `/entrar` e `/api`). Defina `SITE_URL` no `.env` do backend com o domínio final e exponha esses dois caminhos na raiz do domínio (proxy reverso).
+- Limitação conhecida: o frontend é uma SPA. O Google executa JavaScript, mas para melhor indexação e compartilhamento em produção, considere pré-renderizar as páginas públicas (por exemplo, com `vite-ssg` ou SSR).
