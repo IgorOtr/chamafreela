@@ -7,9 +7,12 @@ import AdminDashboard from '../modules/admin/AdminDashboard.jsx'
 import AuditPage from '../modules/admin/AuditPage.jsx'
 import CategoriesPage from '../modules/admin/CategoriesPage.jsx'
 import CompaniesAdminPage from '../modules/admin/CompaniesAdminPage.jsx'
+import MatchConfigPage from '../modules/admin/MatchConfigPage.jsx'
 import OpportunitiesAdminPage from '../modules/admin/OpportunitiesAdminPage.jsx'
 import CompanyProfilePage from '../modules/companies/CompanyProfilePage.jsx'
 import MyOpportunitiesPage from '../modules/companies/MyOpportunitiesPage.jsx'
+import RecommendedPage from '../modules/professionals/RecommendedPage.jsx'
+import NotificationsPage from '../pages/NotificationsPage.jsx'
 import MyInterestsPage from '../modules/professionals/MyInterestsPage.jsx'
 import Opportunities from '../pages/Opportunities.jsx'
 import OpportunityDetail from '../pages/OpportunityDetail.jsx'
@@ -61,6 +64,9 @@ export default function AppRoutes() {
         <Route path="meu-perfil" element={<RequireAuth roles={['PROFISSIONAL']}><MyProfilePage /></RequireAuth>} />
         <Route path="profissionais" element={<RequireAuth roles={['SUPERADMIN', 'ADMIN', 'MODERADOR']}><ProfessionalsPage /></RequireAuth>} />
         <Route path="solicitacoes" element={<RequireAuth roles={['SUPERADMIN', 'ADMIN']}><DataRequestsPage /></RequireAuth>} />
+        <Route path="recomendadas" element={<RequireAuth roles={['PROFISSIONAL']}><RecommendedPage /></RequireAuth>} />
+        <Route path="conecta" element={<RequireAuth roles={['SUPERADMIN', 'ADMIN', 'MODERADOR']}><MatchConfigPage /></RequireAuth>} />
+        <Route path="notificacoes" element={<NotificationsPage />} />
         <Route path="empresa" element={<RequireAuth roles={['EMPRESA']}><CompanyProfilePage /></RequireAuth>} />
         <Route path="oportunidades" element={<RequireAuth roles={['EMPRESA', 'SUPERADMIN', 'ADMIN', 'MODERADOR']}><OpportunitiesPanel /></RequireAuth>} />
         <Route path="interesses" element={<RequireAuth roles={['PROFISSIONAL']}><MyInterestsPage /></RequireAuth>} />

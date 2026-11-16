@@ -12,6 +12,7 @@ const ADMIN_BASE = [
   'datarequests:manage',
   'opportunities:moderate',
   'companies:manage',
+  'match:configure',
 ];
 
 export const PERMISSIONS = {

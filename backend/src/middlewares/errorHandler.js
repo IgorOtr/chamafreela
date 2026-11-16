@@ -1,6 +1,5 @@
 import { ZodError } from 'zod';
 import { AppError } from '../utils/errors.js';
-import { env } from '../config/env.js';
 
 export function notFoundHandler(_req, res) {
   res.status(404).json({ erro: { codigo: 'NOT_FOUND', mensagem: 'Rota não encontrada' } });
@@ -17,6 +16,6 @@ export function errorHandler(err, _req, res, _next) {
   if (err?.type === 'entity.parse.failed') {
     return res.status(400).json({ erro: { codigo: 'BAD_REQUEST', mensagem: 'JSON inválido' } });
   }
-  if (env.NODE_ENV !== 'test') console.error(err);
+  console.error(err); // inclusive em teste: um 500 nunca deve passar em silêncio
   res.status(500).json({ erro: { codigo: 'INTERNAL', mensagem: 'Erro interno do servidor' } });
 }

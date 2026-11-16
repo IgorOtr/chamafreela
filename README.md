@@ -10,6 +10,8 @@ Especificação completa em [`claude.md`](claude.md); arquitetura em [`docs/ARQU
 
 **Fase 3 — Empresas e oportunidades:** perfil empresarial (CNPJ validado, responsável), publicação de oportunidades com moderação obrigatória, edição com reaprovação, encerramento, expiração por prazo, catálogo público com filtros, manifestação de interesse (contato revelado só a quem se interessa e respeitando a autorização do profissional), alertas automáticos de possível fraude para o moderador, limite de pendentes por empresa e suspensão de empresas.
 
+**Fase 4 — CHAMALÁ Conecta:** motor de correspondência por regras e pesos configuráveis (categoria/serviço 30, localização 25, qualificações 15, disponibilidade 15, modalidade 10, preferências 5), com índice 0–100, detalhamento por critério e justificativa em português. Categoria/serviço incompatível nunca gera recomendação. As recomendações são calculadas ao publicar uma oportunidade e ao aprovar/alterar um perfil; há painel de recomendadas, notificações internas (com opt-out; nada é enviado por e-mail/WhatsApp) e tela administrativa de critérios (auditada, recalcula tudo). **Limitação:** a localização compara cidade/bairro; não há distância em km até existir geocodificação.
+
 Pendente da Fase 2: upload de arquivos do portfólio (hoje apenas links https) — depende da escolha do armazenamento S3-compatível.
 
 ## Requisitos

@@ -6,6 +6,9 @@ import { prisma } from '../database/prisma.js';
 export const api = () => request(app);
 
 export async function resetDb() {
+  await prisma.notification.deleteMany();
+  await prisma.recommendation.deleteMany();
+  await prisma.matchConfig.deleteMany();
   await prisma.interest.deleteMany();
   await prisma.opportunity.deleteMany();
   await prisma.company.deleteMany();

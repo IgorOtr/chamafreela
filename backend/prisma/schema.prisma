@@ -38,6 +38,8 @@ model User {
   professional  Professional?
   company       Company?
   dataRequests  DataRequest[]
+  notifications Notification[]
+  notifyRecommendations Boolean @default(true)
 
   @@index([role, status])
 }
@@ -135,6 +137,7 @@ model Professional {
   areas     ServiceArea[]
   portfolio PortfolioItem[]
   interests Interest[]
+  recommendations Recommendation[]
 
   @@index([status, featured])
   @@index([categoryId])
@@ -270,6 +273,7 @@ model Opportunity {
   company   Company    @relation(fields: [companyId], references: [id], onDelete: Cascade)
   category  Category   @relation(fields: [categoryId], references: [id])
   interests Interest[]
+  recommendations Recommendation[]
 
   @@index([status, deadline])
   @@index([categoryId])
@@ -289,4 +293,44 @@ model Interest {
 
   @@unique([opportunityId, professionalId])
   @@index([professionalId])
+}
+
+model MatchConfig {
+  id          String   @id
+  weights     Json
+  minScore    Int      @default(40)
+  updatedById String?
+  updatedAt   DateTime @updatedAt
+}
+
+model Recommendation {
+  id             String    @id @default(uuid())
+  opportunityId  String
+  professionalId String
+  score          Int
+  breakdown      Json
+  justification  String
+  dismissedAt    DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  opportunity  Opportunity  @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
+  professional Professional @relation(fields: [professionalId], references: [id], onDelete: Cascade)
+
+  @@unique([opportunityId, professionalId])
+  @@index([professionalId, score])
+}
+
+model Notification {
+  id        String    @id @default(uuid())
+  userId    String
+  type      String
+  title     String
+  body      String
+  link      String?
+  readAt    DateTime?
+  createdAt DateTime  @default(now())
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, readAt])
 }

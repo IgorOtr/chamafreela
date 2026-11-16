@@ -5,8 +5,10 @@ import authRoutes from '../modules/auth/auth.routes.js';
 import categoriesRoutes from '../modules/categories/categories.routes.js';
 import companiesRoutes from '../modules/companies/companies.routes.js';
 import datarequestsRoutes from '../modules/datarequests/datarequests.routes.js';
+import notificationsRoutes from '../modules/notifications/notifications.routes.js';
 import opportunitiesRoutes from '../modules/opportunities/opportunities.routes.js';
 import professionalsRoutes from '../modules/professionals/professionals.routes.js';
+import recommendationsRoutes from '../modules/recommendations/recommendations.routes.js';
 import usersRoutes from '../modules/users/users.routes.js';
 
 const router = Router();
@@ -20,4 +22,6 @@ router.use('/professionals', professionalsRoutes);
 router.use('/data-requests', datarequestsRoutes);
 router.use('/companies', companiesRoutes);
 router.use('/opportunities', opportunitiesRoutes);
+router.use('/recommendations', recommendationsRoutes);
+router.use('/notifications', notificationsRoutes);
 export default router;

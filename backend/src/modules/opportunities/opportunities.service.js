@@ -1,6 +1,7 @@
 import { prisma } from '../../database/prisma.js';
 import { badRequest, conflict, forbidden, notFound } from '../../utils/errors.js';
 import * as audit from '../audit/audit.service.js';
+import { recomputeForOpportunity, safely } from '../recommendations/recommendations.service.js';
 import { detectFlags } from './fraud.js';
 
 const MAX_PENDING_PER_COMPANY = 5;
@@ -96,6 +97,7 @@ export async function update(user, id, data, ip) {
     where: { id }, data: { ...data, flags, status: 'PENDENTE', rejectionReason: null, publishedAt: null }, include: { category: categorySel },
   });
   await audit.record({ actorId: user.id, action: 'OPPORTUNITY_UPDATE', entity: 'Opportunity', entityId: id, ip, changes: { de: o.status, para: 'PENDENTE', flags } });
+  await safely(() => recomputeForOpportunity(id));
   return updated;
 }
 
@@ -104,6 +106,7 @@ export async function close(user, id, ip) {
   if (o.status === 'ENCERRADA') throw badRequest('Oportunidade já encerrada');
   const updated = await prisma.opportunity.update({ where: { id }, data: { status: 'ENCERRADA', closedAt: new Date() } });
   await audit.record({ actorId: user.id, action: 'OPPORTUNITY_CLOSE', entity: 'Opportunity', entityId: id, ip, changes: { de: o.status } });
+  await safely(() => recomputeForOpportunity(id));
   return updated;
 }
 
@@ -203,5 +206,6 @@ export async function review(actor, id, { action, reason }, ip) {
   if (t.to === 'ENCERRADA') data.closedAt = new Date();
   const updated = await prisma.opportunity.update({ where: { id }, data, include: { category: categorySel } });
   await audit.record({ actorId: actor.id, action: `OPPORTUNITY_${action}`, entity: 'Opportunity', entityId: id, ip, changes: { de: o.status, para: t.to, motivo: reason, flags: o.flags } });
+  await safely(() => recomputeForOpportunity(id));
   return updated;
 }

@@ -1,7 +1,8 @@
-import { Briefcase, Building2, ClipboardCheck, HeartHandshake, LayoutDashboard, LogOut, Menu, ScrollText, Search, ShieldCheck, Tags, UserCheck, UserCircle, Users, X } from 'lucide-react'
+import { Sparkles, SlidersHorizontal, Briefcase, Building2, ClipboardCheck, HeartHandshake, LayoutDashboard, LogOut, Menu, ScrollText, Search, ShieldCheck, Tags, UserCheck, UserCircle, Users, X } from 'lucide-react'
 import { useState } from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import Logo from '../components/Logo.jsx'
+import NotificationBell from '../components/NotificationBell.jsx'
 import { useAuth } from '../contexts/AuthContext.jsx'
 import { ROLE_LABEL, isStaff } from '../utils/roles.js'
 
@@ -11,6 +12,7 @@ const staffNav = [
   { to: '/painel/profissionais', label: 'Profissionais', icon: UserCheck, roles: ['SUPERADMIN', 'ADMIN', 'MODERADOR'] },
   { to: '/painel/oportunidades', label: 'Oportunidades', icon: ClipboardCheck, roles: ['SUPERADMIN', 'ADMIN', 'MODERADOR'] },
   { to: '/painel/empresas', label: 'Empresas', icon: Building2, roles: ['SUPERADMIN', 'ADMIN'] },
+  { to: '/painel/conecta', label: 'Conecta (critérios)', icon: SlidersHorizontal, roles: ['SUPERADMIN', 'ADMIN', 'MODERADOR'] },
   { to: '/painel/categorias', label: 'Categorias', icon: Tags, roles: ['SUPERADMIN', 'ADMIN'] },
   { to: '/painel/solicitacoes', label: 'Solicitações LGPD', icon: ShieldCheck, roles: ['SUPERADMIN', 'ADMIN'] },
   { to: '/painel/auditoria', label: 'Auditoria', icon: ScrollText, roles: ['SUPERADMIN', 'ADMIN'] },
@@ -18,6 +20,7 @@ const staffNav = [
 const userNav = [
   { to: '/painel', label: 'Dashboard', icon: LayoutDashboard, end: true },
   { to: '/painel/meu-perfil', label: 'Meu perfil', icon: UserCircle, roles: ['PROFISSIONAL'] },
+  { to: '/painel/recomendadas', label: 'Recomendadas', icon: Sparkles, roles: ['PROFISSIONAL'] },
   { to: '/painel/interesses', label: 'Meus interesses', icon: HeartHandshake, roles: ['PROFISSIONAL'] },
   { to: '/painel/empresa', label: 'Perfil da empresa', icon: Building2, roles: ['EMPRESA'] },
   { to: '/painel/oportunidades', label: 'Minhas oportunidades', icon: Briefcase, roles: ['EMPRESA'] },
@@ -51,6 +54,7 @@ export default function DashboardLayout() {
             <div className="lg:hidden"><Logo /></div>
           </div>
           <div className="flex items-center gap-3 text-sm">
+            {user.role === 'PROFISSIONAL' && <NotificationBell />}
             <div className="text-right leading-tight">
               <p className="font-semibold">{user.name}</p>
               <p className="text-xs text-ink/60">{ROLE_LABEL[user.role]}</p>

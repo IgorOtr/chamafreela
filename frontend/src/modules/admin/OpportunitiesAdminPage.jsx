@@ -17,6 +17,7 @@ export default function OpportunitiesAdminPage() {
   const [sel, setSel] = useState(null)
   const [reason, setReason] = useState('')
   const [busy, setBusy] = useState(false)
+  const matches = useFetch(sel ? `/recommendations/admin/opportunity/${sel.id}` : '/categories')
   const history = useFetch('/audit', sel ? { entity: 'Opportunity', entityId: sel.id, pageSize: 10 } : { pageSize: 1, entity: '__none__' })
 
   const review = async (action) => {
@@ -67,6 +68,9 @@ export default function OpportunitiesAdminPage() {
             <p><b>Canal de contato:</b> {sel.contactChannel}</p>
             <Field label="Motivo (obrigatório ao rejeitar)" htmlFor="reason"><input id="reason" className={inputClass} value={reason} onChange={(e) => setReason(e.target.value)} /></Field>
             <div className="flex flex-wrap gap-2">{ACTIONS[sel.status].map((a) => <Button key={a} loading={busy} variant={a === 'APROVAR' ? 'primary' : a === 'REJEITAR' ? 'danger' : 'outline'} onClick={() => review(a)}>{LABEL[a]}</Button>)}</div>
+            <div><p className="mb-1 font-semibold">Profissionais compatíveis (Conecta)</p>
+              {sel.status !== 'PUBLICADA' ? <p className="text-xs text-ink/50">Calculado após a publicação.</p> : matches.data?.length ? <ul className="space-y-1 text-xs text-ink/70">{matches.data.slice(0, 8).map((m) => <li key={m.id}><b>{m.score}%</b> — {m.professional.displayName} ({m.professional.category.name})</li>)}</ul> : <p className="text-xs text-ink/50">Nenhum profissional compatível.</p>}
+            </div>
             <div><p className="mb-1 font-semibold">Histórico</p>
               {history.data?.items?.length ? <ul className="space-y-1 text-xs text-ink/70">{history.data.items.map((h) => <li key={h.id}>{formatDateTime(h.createdAt)} — {h.action.replace('OPPORTUNITY_', '')} {h.actor && `por ${h.actor.name}`}</li>)}</ul> : <p className="text-xs text-ink/50">Sem registros.</p>}
             </div>

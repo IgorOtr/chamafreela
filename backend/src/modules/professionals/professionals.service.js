@@ -3,6 +3,7 @@ import { prisma } from '../../database/prisma.js';
 import { badRequest, notFound } from '../../utils/errors.js';
 import { slugify } from '../../utils/slugify.js';
 import * as audit from '../audit/audit.service.js';
+import { recomputeForProfessional, safely } from '../recommendations/recommendations.service.js';
 
 const include = { category: { select: { id: true, name: true, slug: true } }, services: true, areas: true, portfolio: { orderBy: { position: 'asc' } } };
 
@@ -103,6 +104,7 @@ export async function saveOwn(user, data, ip) {
     actorId: user.id, action: existing ? 'PROFESSIONAL_UPDATE' : 'PROFESSIONAL_SUBMIT', entity: 'Professional', entityId: saved.id, ip,
     changes: { status: saved.status, displayName: saved.displayName },
   });
+  if (saved.status === 'APROVADO') await safely(() => recomputeForProfessional(saved.id));
   return saved;
 }
 
@@ -139,6 +141,7 @@ export async function review(actor, id, { action, reason }, ip) {
   if (t.to !== 'APROVADO') data.featured = false;
   const updated = await prisma.professional.update({ where: { id }, data, include });
   await audit.record({ actorId: actor.id, action: `PROFESSIONAL_${action}`, entity: 'Professional', entityId: id, ip, changes: { de: p.status, para: t.to, motivo: reason } });
+  await safely(() => recomputeForProfessional(id));
   return updated;
 }
 
@@ -150,5 +153,6 @@ export async function adminEdit(actor, id, data, ip) {
   const updated = await prisma.professional.update({ where: { id }, data, include });
   const diff = Object.fromEntries(Object.keys(data).map((k) => [k, { de: p[k], para: data[k] }]));
   await audit.record({ actorId: actor.id, action: 'PROFESSIONAL_ADMIN_EDIT', entity: 'Professional', entityId: id, ip, changes: diff });
+  if (data.categoryId) await safely(() => recomputeForProfessional(id));
   return updated;
 }
