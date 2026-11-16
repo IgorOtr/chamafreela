@@ -123,3 +123,23 @@ export const SECTIONS = [
     blocks: [{ contact: true }],
   },
 ]
+
+// Variante da política quando a cobrança (Asaas) está ATIVA. O texto padrão acima vale enquanto não há pagamentos.
+const PAYMENT_ROW = ['Pagamentos e assinaturas', 'plano contratado, situação da assinatura, valores, datas e forma de pagamento, identificadores da cobrança no gateway. O CPF/CNPJ informado para emitir a cobrança é repassado ao gateway e não é armazenado por nós; dados de cartão não passam pelo nosso servidor', 'Você, ao contratar, e o gateway de pagamento']
+const PAYMENT_PURPOSE = ['Processar a contratação de plano pago, cobrar, conciliar pagamentos e prevenir fraudes', 'Execução de contrato (inciso V) e cumprimento de obrigações legais e fiscais (inciso II)']
+const PAYMENT_PARAGRAPH = 'Quando você contrata um plano pago, o pagamento é processado pelo Asaas, nosso gateway de pagamento. O Asaas recebe os dados necessários para emitir a cobrança (nome, e-mail e CPF/CNPJ) e trata os dados de pagamento, inclusive de cartão, conforme a sua própria política de privacidade. Atualmente não usamos serviços de inteligência artificial externos e não enviamos dados pessoais a eles. Se qualquer outro recurso que envolva dados pessoais for adotado no futuro, atualizaremos esta política antes e, quando necessário, pediremos o seu consentimento.'
+
+export function forBilling(on) {
+  if (!on) return { summary: SUMMARY, sections: SECTIONS }
+  const summary = SUMMARY.map((s) => (s.startsWith('Hoje não usamos cookies') ? 'Hoje não usamos cookies de publicidade ou de análise nem enviamos dados pessoais a serviços de inteligência artificial. Pagamentos de planos pagos são processados pelo Asaas, em página segura: não guardamos dados de cartão.' : s))
+  const sections = SECTIONS.map((sec) => ({
+    ...sec,
+    blocks: sec.blocks.map((b) => {
+      if (sec.id === 'dados' && b.table) return { table: { ...b.table, rows: [...b.table.rows.slice(0, -1), PAYMENT_ROW, b.table.rows.at(-1)] } }
+      if (sec.id === 'finalidades' && b.table) return { table: { ...b.table, rows: [...b.table.rows, PAYMENT_PURPOSE] } }
+      if (sec.id === 'compartilhamento' && b.p?.startsWith('Atualmente não usamos serviços de inteligência artificial')) return { p: PAYMENT_PARAGRAPH }
+      return b
+    }),
+  }))
+  return { summary, sections }
+}

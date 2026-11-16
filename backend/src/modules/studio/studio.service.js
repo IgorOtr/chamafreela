@@ -1,6 +1,7 @@
 import crypto from 'node:crypto';
 import { prisma } from '../../database/prisma.js';
 import { badRequest, notFound } from '../../utils/errors.js';
+import { assertAssetCapacity, consume } from '../billing/entitlements.js';
 import { buildCalendar, POST_TYPES } from './calendar.js';
 import { checkContrast, FONTS, PALETTES } from './colors.js';
 import { buildLogoSvg, SHAPES } from './logo.js';
@@ -15,7 +16,8 @@ export const options = () => ({
   notice: 'Os textos são montados a partir de modelos e usam somente as informações que você fornecer. Revise antes de publicar: nada é publicado automaticamente.',
 });
 
-export function generate({ type, brief, seed }) {
+export async function generate(user, { type, brief, seed }) {
+  await consume(user, 'studioGenerationsPerMonth');
   const usedSeed = seed ?? newSeed();
   return { seed: usedSeed, type, variants: generateTexts(type, brief, usedSeed) };
 }
@@ -36,7 +38,8 @@ export async function saveBrand(user, b) {
   return { ...saved, contrast: checkContrast(b.colors) };
 }
 
-export function calendar({ brief, weeks, postsPerWeek, startDate, seed }) {
+export async function calendar(user, { brief, weeks, postsPerWeek, startDate, seed }) {
+  await consume(user, 'studioGenerationsPerMonth');
   const usedSeed = seed ?? newSeed();
   return { seed: usedSeed, items: buildCalendar(brief, { weeks, postsPerWeek, startDate }, usedSeed) };
 }
@@ -45,6 +48,7 @@ export function calendar({ brief, weeks, postsPerWeek, startDate, seed }) {
 export const listAssets = (userId, type) => prisma.marketingAsset.findMany({ where: { userId, ...(type && { type }) }, orderBy: { updatedAt: 'desc' }, take: MAX_ASSETS });
 
 export async function createAsset(user, body) {
+  await assertAssetCapacity(user);
   if ((await prisma.marketingAsset.count({ where: { userId: user.id } })) >= MAX_ASSETS) throw badRequest(`Limite de ${MAX_ASSETS} materiais salvos atingido. Exclua algum para continuar.`);
   return prisma.marketingAsset.create({ data: { userId: user.id, type: body.type, title: body.title, content: body.content, data: body.data ?? undefined } });
 }

@@ -2,6 +2,7 @@ import { ibge as realIbge } from '../../integrations/ibge.js';
 import { prisma } from '../../database/prisma.js';
 import { badRequest, notFound } from '../../utils/errors.js';
 import * as audit from '../audit/audit.service.js';
+import { recordEvent } from '../reports/events.js';
 import { normalize } from '../recommendations/matching.js';
 import { geometryCenter } from './geo.js';
 import { CEMPRE, INDICATORS, STRUCTURAL_NOTES } from './indicators.js';
@@ -62,6 +63,7 @@ export async function sync(actor, codes, ip) {
   for (const code of list) {
     try { reports.push(await syncMunicipality(code)); } catch (e) { reports.push({ code, name: null, ok: [], failed: [{ indicador: 'município', erro: e.message }] }); }
   }
+  for (const r of reports) for (const f of r.failed) await recordEvent({ level: 'warn', source: 'ibge-sync', message: `${r.code} ${r.name ?? ''} — ${f.indicador}: ${f.erro}` });
   await audit.record({ actorId: actor.id, action: 'TERRITORIAL_SYNC', entity: 'Municipality', ip, changes: { municipios: reports.map((r) => ({ code: r.code, ok: r.ok.length, falhas: r.failed.length })) } });
   return reports;
 }

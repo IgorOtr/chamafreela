@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { Card, EmptyState, Spinner } from '../../components/ui.jsx'
 import { useAuth } from '../../contexts/AuthContext.jsx'
@@ -50,7 +51,11 @@ export default function AdminDashboard() {
           <ul className="space-y-1.5 text-sm">{data.topCategories.map((c) => <li key={c.name} className="flex justify-between"><span>{c.name}</span><b>{c.count}</b></li>)}</ul>
         )}
       </Card>
-      <p className="text-sm text-ink/60">Indicadores de assinaturas serão exibidos quando esse módulo for implementado.</p>
+      <Card>
+        <h2 className="mb-2 font-display text-lg font-bold">Assinaturas</h2>
+        <p className="text-sm"><b>{data.subscriptions.activePaid}</b> assinatura(s) paga(s) ou concedida(s) ativa(s) · {Math.max(0, data.subscriptions.nonStaffUsers - data.subscriptions.activePaid)} usuário(s) no plano FREE.</p>
+        <Link to="/painel/assinaturas" className="mt-2 inline-block text-sm font-semibold text-brand-700 underline">Gerenciar assinaturas</Link>
+      </Card>
     </div>
   )
 }

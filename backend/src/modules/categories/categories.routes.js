@@ -10,7 +10,7 @@ const createBody = z.object({ name: z.string().trim().min(2).max(80), descriptio
 const updateBody = createBody.partial().extend({ active: z.boolean().optional() })
   .refine((v) => Object.keys(v).length > 0, 'Nada para atualizar');
 
-router.get('/', asyncHandler(async (_req, res) => res.json(await service.listPublic())));
+router.get('/', asyncHandler(async (_req, res) => { res.set('Cache-Control', 'public, max-age=60'); res.json(await service.listPublic()); }));
 router.get('/all', authenticate, requirePermission('categories:manage'),
   asyncHandler(async (_req, res) => res.json(await service.listAll())));
 router.post('/', authenticate, requirePermission('categories:manage'), validate(createBody),

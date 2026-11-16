@@ -6,6 +6,12 @@ import { prisma } from '../database/prisma.js';
 export const api = () => request(app);
 
 export async function resetDb() {
+  await prisma.webhookEvent.deleteMany();
+  await prisma.billingCustomer.deleteMany();
+  await prisma.payment.deleteMany();
+  await prisma.subscription.deleteMany();
+  await prisma.usageCounter.deleteMany();
+  await prisma.systemEvent.deleteMany();
   await prisma.plan.deleteMany();
   await prisma.marketingAsset.deleteMany();
   await prisma.brandKit.deleteMany();

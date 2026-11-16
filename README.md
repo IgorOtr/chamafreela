@@ -69,3 +69,13 @@ Definidos em `backend/src/config/permissions.js` e verificados em cada rota. SUP
 - **Antes de publicar:** preencha `VITE_CONTROLLER_NAME`, `VITE_CONTROLLER_CNPJ` e `VITE_PRIVACY_EMAIL` (ver `frontend/.env.example`) e submeta o texto à revisão jurídica. Enquanto essas variáveis estiverem vazias, a página exibe o aviso de "versão preliminar".
 - **Privacidade e dados** no painel (`/painel/privacidade`, todos os papéis): download dos próprios dados em JSON (`GET /api/privacy/export`, sem senhas nem dados de terceiros, auditado), pedidos de atualização/exclusão e acompanhamento do status. A administração trata os pedidos em "Solicitações LGPD".
 - A integração com IA externa e o gateway de pagamento ficaram para uma melhoria futura (a decisão do contratante). A política já afirma que hoje não há IA externa nem cobrança.
+
+## Fase 9 — Monetização e aprimoramento
+- **Planos editáveis** pelo painel (`/painel/planos`): preço, promoção, benefícios, limites de uso, disponibilidade e destaque, com auditoria. A vitrine pública reflete na hora.
+- **Assinaturas** (`/painel/assinaturas`): concessão manual (cortesia/parceria, sem cobrança), cancelamento e listagem. **Minha assinatura** (`/painel/assinatura`): plano, uso mensal × limites, histórico de pagamentos, contratar/cancelar.
+- **Limites de uso por plano**, aplicados no servidor de forma atômica: simulações/mês, gerações do Studio/mês e materiais salvos. Limite vazio = ilimitado (os valores comerciais ainda serão definidos pelo contratante). Administradores não sofrem limites.
+- **Asaas (pagamentos): integração pronta e desligada.** Cliente, assinatura mensal, página de pagamento hospedada (PIX/boleto/cartão), webhook idempotente, suspensão por atraso, reativação, reembolso, fim automático da promoção e painel de prontidão com teste de conexão. Para operar: configurar a conta Asaas (razão social e CNPJ), as variáveis `ASAAS_*` e `BILLING_ENABLED=true`. **Passo a passo e checklist em [`docs/ASAAS.md`](docs/ASAAS.md).** Não há cobrança real enquanto isso não for feito.
+- **Relatórios** (`/painel/relatorios`): crescimento de cadastros, utilização dos módulos, assinaturas, funil, exportação CSV e **falhas operacionais** (erros 5xx e alertas de integrações).
+- **Segurança**: revisão, endurecimento e suíte de testes em [`docs/SEGURANCA.md`](docs/SEGURANCA.md).
+- **Otimização**: páginas pesadas (mapa, gráficos, Studio/PDF) carregam sob demanda (bundle inicial de ~718 kB para ~475 kB), compressão gzip na API, cache curto em listas públicas.
+- Política de Privacidade passa a incluir o texto de pagamentos automaticamente quando a cobrança estiver ativa.

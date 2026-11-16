@@ -14,6 +14,9 @@ const ADMIN_BASE = [
   'companies:manage',
   'match:configure',
   'territorial:manage',
+  'plans:manage',
+  'subscriptions:manage',
+  'reports:read',
 ];
 
 export const PERMISSIONS = {

@@ -11,9 +11,9 @@ const router = Router();
 router.use(authenticate, requireRole('PROFISSIONAL', 'EMPRESA'));
 
 router.get('/options', (_req, res) => res.json(service.options()));
-router.post('/generate', validate(generateSchema), (req, res) => res.json(service.generate(req.body)));
+router.post('/generate', validate(generateSchema), asyncHandler(async (req, res) => res.json(await service.generate(req.user, req.body))));
 router.post('/logo/preview', validate(logoPreviewSchema), (req, res) => res.json(service.logoPreview(req.body)));
-router.post('/calendar/generate', validate(calendarSchema), (req, res) => res.json(service.calendar(req.body)));
+router.post('/calendar/generate', validate(calendarSchema), asyncHandler(async (req, res) => res.json(await service.calendar(req.user, req.body))));
 
 router.get('/brand', asyncHandler(async (req, res) => {
   const b = await service.getBrand(req.user.id);

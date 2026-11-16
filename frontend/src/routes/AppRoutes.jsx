@@ -1,9 +1,10 @@
+import { Suspense, lazy } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { Spinner } from '../components/ui.jsx'
 import { useAuth } from '../contexts/AuthContext.jsx'
 import DashboardLayout from '../layouts/DashboardLayout.jsx'
 import PublicLayout from '../layouts/PublicLayout.jsx'
-import AdminDashboard from '../modules/admin/AdminDashboard.jsx'
+const AdminDashboard = lazy(() => import('../modules/admin/AdminDashboard.jsx'))
 import AuditPage from '../modules/admin/AuditPage.jsx'
 import CategoriesPage from '../modules/admin/CategoriesPage.jsx'
 import CompaniesAdminPage from '../modules/admin/CompaniesAdminPage.jsx'
@@ -13,17 +14,21 @@ import CompanyProfilePage from '../modules/companies/CompanyProfilePage.jsx'
 import MyOpportunitiesPage from '../modules/companies/MyOpportunitiesPage.jsx'
 import RecommendedPage from '../modules/professionals/RecommendedPage.jsx'
 import NotificationsPage from '../pages/NotificationsPage.jsx'
-import HistoryPage from '../modules/insights/HistoryPage.jsx'
-import InsightsPage from '../modules/insights/InsightsPage.jsx'
-import SimulationResultPage from '../modules/insights/SimulationResultPage.jsx'
+const HistoryPage = lazy(() => import('../modules/insights/HistoryPage.jsx'))
+const InsightsPage = lazy(() => import('../modules/insights/InsightsPage.jsx'))
+const SimulationResultPage = lazy(() => import('../modules/insights/SimulationResultPage.jsx'))
 import PrivacyCenterPage from '../modules/legal/PrivacyCenterPage.jsx'
-import StudioPage from '../modules/studio/StudioPage.jsx'
-import MapPage from '../modules/territorial/MapPage.jsx'
+const StudioPage = lazy(() => import('../modules/studio/StudioPage.jsx'))
+const MapPage = lazy(() => import('../modules/territorial/MapPage.jsx'))
 import MyInterestsPage from '../modules/professionals/MyInterestsPage.jsx'
 import Opportunities from '../pages/Opportunities.jsx'
 import OpportunityDetail from '../pages/OpportunityDetail.jsx'
 import DataRequestsPage from '../modules/admin/DataRequestsPage.jsx'
 import ProfessionalsPage from '../modules/admin/ProfessionalsPage.jsx'
+const ReportsPage = lazy(() => import('../modules/admin/ReportsPage.jsx'))
+const PlansAdminPage = lazy(() => import('../modules/admin/PlansAdminPage.jsx'))
+const SubscriptionsAdminPage = lazy(() => import('../modules/admin/SubscriptionsAdminPage.jsx'))
+const MySubscriptionPage = lazy(() => import('../modules/billing/MySubscriptionPage.jsx'))
 import UsersPage from '../modules/admin/UsersPage.jsx'
 import LoginPage from '../modules/auth/LoginPage.jsx'
 import RegisterPage from '../modules/auth/RegisterPage.jsx'
@@ -57,6 +62,7 @@ function OpportunitiesPanel() {
 
 export default function AppRoutes() {
   return (
+    <Suspense fallback={<Spinner />}>
     <Routes>
       <Route element={<PublicLayout />}>
         <Route index element={<Home />} />
@@ -87,11 +93,16 @@ export default function AppRoutes() {
         <Route path="oportunidades" element={<RequireAuth roles={['EMPRESA', 'SUPERADMIN', 'ADMIN', 'MODERADOR']}><OpportunitiesPanel /></RequireAuth>} />
         <Route path="interesses" element={<RequireAuth roles={['PROFISSIONAL']}><MyInterestsPage /></RequireAuth>} />
         <Route path="empresas" element={<RequireAuth roles={['SUPERADMIN', 'ADMIN']}><CompaniesAdminPage /></RequireAuth>} />
+        <Route path="assinatura" element={<RequireAuth roles={['PROFISSIONAL', 'EMPRESA', 'CLIENTE']}><MySubscriptionPage /></RequireAuth>} />
+        <Route path="planos" element={<RequireAuth roles={['SUPERADMIN', 'ADMIN']}><PlansAdminPage /></RequireAuth>} />
+        <Route path="assinaturas" element={<RequireAuth roles={['SUPERADMIN', 'ADMIN']}><SubscriptionsAdminPage /></RequireAuth>} />
+        <Route path="relatorios" element={<RequireAuth roles={['SUPERADMIN', 'ADMIN']}><ReportsPage /></RequireAuth>} />
         <Route path="usuarios" element={<RequireAuth roles={['SUPERADMIN', 'ADMIN', 'MODERADOR']}><UsersPage /></RequireAuth>} />
         <Route path="categorias" element={<RequireAuth roles={['SUPERADMIN', 'ADMIN']}><CategoriesPage /></RequireAuth>} />
         <Route path="auditoria" element={<RequireAuth roles={['SUPERADMIN', 'ADMIN']}><AuditPage /></RequireAuth>} />
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>
+    </Suspense>
   )
 }

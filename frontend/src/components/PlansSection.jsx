@@ -5,7 +5,10 @@ import { useFetch } from '../hooks/useFetch.js'
 
 const money = (cents) => (cents / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
 
+const LIMIT_TEXT = { simulationsPerMonth: (n) => `Até ${n} simulações financeiras por mês`, studioGenerationsPerMonth: (n) => `Até ${n} gerações de texto e calendário por mês`, studioAssets: (n) => `Até ${n} materiais salvos no Studio` }
+
 function PlanCard({ plan }) {
+  const limitLines = Object.entries(plan.limits ?? {}).filter(([k, v]) => v != null && LIMIT_TEXT[k]).map(([k, v]) => LIMIT_TEXT[k](v))
   const free = plan.priceCents === 0
   const promo = plan.promoPriceCents != null
   return (
@@ -22,7 +25,7 @@ function PlanCard({ plan }) {
         ) : <p className="font-display text-4xl font-extrabold text-brand-700">{money(plan.priceCents)}<span className="text-base font-semibold text-ink/60">/mês</span></p>}
       </div>
       <ul className="mb-6 space-y-2 text-sm">
-        {plan.features.map((f) => <li key={f} className="flex gap-2"><Check className="mt-0.5 size-4 shrink-0 text-brand-500" aria-hidden />{f}</li>)}
+        {[...plan.features, ...limitLines].map((f) => <li key={f} className="flex gap-2"><Check className="mt-0.5 size-4 shrink-0 text-brand-500" aria-hidden />{f}</li>)}
       </ul>
       {promo && plan.promoNote && <p className="mb-4 text-xs text-ink/60">{plan.promoNote}</p>}
       <div className="mt-auto">

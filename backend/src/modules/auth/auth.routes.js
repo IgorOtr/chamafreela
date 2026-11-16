@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { env } from '../../config/env.js';
 import { authenticate } from '../../middlewares/auth.js';
-import { authLimiter } from '../../middlewares/rateLimit.js';
+import { authLimiter, loginEmailLimiter } from '../../middlewares/rateLimit.js';
 import { validate } from '../../middlewares/validate.js';
 import { asyncHandler } from '../../utils/asyncHandler.js';
 import { forbidden } from '../../utils/errors.js';
@@ -33,7 +33,7 @@ function checkOrigin(req, _res, next) {
 router.post('/register', authLimiter, validate(registerSchema),
   asyncHandler(async (req, res) => send(res, 201, await service.register(req.body))));
 
-router.post('/login', authLimiter, validate(loginSchema),
+router.post('/login', authLimiter, validate(loginSchema), loginEmailLimiter,
   asyncHandler(async (req, res) => send(res, 200, await service.login(req.body))));
 
 router.post('/refresh', authLimiter, checkOrigin,

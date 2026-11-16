@@ -2,6 +2,7 @@ import crypto from 'node:crypto';
 import { prisma } from '../../database/prisma.js';
 import { notFound } from '../../utils/errors.js';
 import { normalize } from '../recommendations/matching.js';
+import { consume } from '../billing/entitlements.js';
 import { DEFAULT_ASSUMPTIONS, DISCLAIMER, MODEL_VERSION, describeAssumptions, runSimulation } from './engine.js';
 
 export const defaults = () => ({
@@ -38,6 +39,7 @@ const present = (s) => ({
 export async function create(user, { name, city, activity, inputs, assumptions, iterations, seed }) {
   const usedSeed = seed ?? crypto.randomInt(0, 2_147_483_647);
   const results = runSimulation(inputs, { seed: usedSeed, iterations, assumptions });
+  await consume(user, 'simulationsPerMonth');
   const observed = await observedContext(city);
   const row = await prisma.simulation.create({
     data: {
