@@ -41,6 +41,8 @@ DATABASE_URL=... npx prisma migrate deploy
 npm test
 ```
 
+> **Dica de testes/produção:** o Prisma usa por padrão `connect_timeout=5s`. Em máquinas carregadas (Docker, vários processos), testes com muitas requisições paralelas podem estourar esse prazo de forma intermitente (um erro 500 após ~5 s). Use `?schema=public&connect_timeout=20&pool_timeout=20` na `DATABASE_URL` (já presente no `.env.example`) e dimensione `connection_limit` conforme o ambiente.
+
 ## Variáveis de ambiente (backend)
 | Variável | Descrição |
 |---|---|
