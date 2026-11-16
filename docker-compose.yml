@@ -1,0 +1,18 @@
+services:
+  db:
+    image: postgis/postgis:16-3.4
+    container_name: chamalafree-db
+    environment:
+      POSTGRES_USER: chamalafree
+      POSTGRES_PASSWORD: chamalafree_dev
+      POSTGRES_DB: chamalafree
+    ports:
+      - "5434:5432"
+    volumes:
+      - chamalafree_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U chamalafree"]
+      interval: 5s
+      retries: 10
+volumes:
+  chamalafree_pgdata:

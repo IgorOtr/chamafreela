@@ -1,0 +1,47 @@
+import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+import { Card, EmptyState, Spinner } from '../../components/ui.jsx'
+import { useAuth } from '../../contexts/AuthContext.jsx'
+import { useFetch } from '../../hooks/useFetch.js'
+import { ROLE_LABEL } from '../../utils/roles.js'
+
+const Stat = ({ label, value }) => (
+  <Card><p className="text-sm text-ink/60">{label}</p><p className="font-display text-3xl font-extrabold text-brand-700">{value}</p></Card>
+)
+
+export default function AdminDashboard() {
+  const { user } = useAuth()
+  const { data, loading, error } = useFetch('/admin/dashboard')
+  if (loading) return <Spinner />
+  if (error) return <p role="alert" className="text-red-700">{error}</p>
+
+  return (
+    <div className="space-y-6">
+      <h1 className="font-display text-3xl font-extrabold">Painel administrativo <span className="text-base font-semibold text-ink/50">· {ROLE_LABEL[user.role]}</span></h1>
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <Stat label="Total de usuários" value={data.totalUsers} />
+        <Stat label="Profissionais" value={data.usersByRole.PROFISSIONAL ?? 0} />
+        <Stat label="Empresas" value={data.usersByRole.EMPRESA ?? 0} />
+        <Stat label="Categorias ativas" value={data.activeCategories} />
+      </div>
+      <Card>
+        <h2 className="mb-4 font-display text-lg font-bold">Novos cadastros — últimos 30 dias</h2>
+        {data.signupsLast30Days.length === 0 ? (
+          <EmptyState title="Nenhum cadastro no período">Os cadastros aparecerão aqui assim que forem realizados.</EmptyState>
+        ) : (
+          <div className="h-64">
+            <ResponsiveContainer>
+              <BarChart data={data.signupsLast30Days}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                <XAxis dataKey="date" tickFormatter={(d) => d.slice(8) + '/' + d.slice(5, 7)} />
+                <YAxis allowDecimals={false} />
+                <Tooltip />
+                <Bar dataKey="count" name="Cadastros" fill="#0f5c4d" radius={[6, 6, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        )}
+      </Card>
+      <p className="text-sm text-ink/60">Indicadores de profissionais pendentes, oportunidades e assinaturas serão exibidos quando esses módulos forem implementados.</p>
+    </div>
+  )
+}
