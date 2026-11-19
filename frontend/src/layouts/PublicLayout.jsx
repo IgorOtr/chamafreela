@@ -5,7 +5,7 @@ import Logo from '../components/Logo.jsx'
 import { Button } from '../components/ui.jsx'
 import { useAuth } from '../contexts/AuthContext.jsx'
 
-const NAV = [['/profissionais', 'Profissionais'], ['/oportunidades', 'Oportunidades'], ['/planos', 'Planos']]
+const NAV = [['/profissionais', 'Profissionais'], ['/oportunidades', 'Oportunidades'], ['/formalize-seu-negocio', 'Formalize seu negócio'], ['/planos', 'Planos']]
 
 export default function PublicLayout() {
   const { user } = useAuth()

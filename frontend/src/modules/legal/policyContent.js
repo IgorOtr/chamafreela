@@ -143,3 +143,26 @@ export function forBilling(on) {
   }))
   return { summary, sections }
 }
+
+// Variante da política quando o serviço CHAMALÁ Formaliza (agendamento de consultoria) está ATIVO.
+const FORMALIZA_ROW = ['Agendamento de consultoria (CHAMALÁ Formaliza)', 'nome, WhatsApp, e-mail, descrição breve do negócio e modalidade escolhida, informados na página de agendamento', 'Você, ao agendar']
+const FORMALIZA_PURPOSE = ['Marcar e realizar a consultoria de formalização solicitada por você e acompanhar o atendimento', 'Procedimentos preliminares a pedido do titular (inciso V)']
+const FORMALIZA_PARAGRAPH = 'Ao agendar uma consultoria em "Formalize seu negócio", os dados informados são recebidos pela ferramenta de agendamento contratada por nós, que os trata conforme a sua própria política de privacidade, e registrados em uma planilha de acompanhamento de acesso restrito à nossa equipe. Usamos esses dados apenas para marcar e realizar o atendimento. Nunca pedimos senhas nem códigos de autenticação da sua conta gov.br.'
+
+export function withFormaliza({ summary, sections }, on) {
+  if (!on) return { summary, sections }
+  return {
+    summary,
+    sections: sections.map((sec) => ({
+      ...sec,
+      blocks: [
+        ...sec.blocks.map((b) => {
+          if (sec.id === 'dados' && b.table) return { table: { ...b.table, rows: [...b.table.rows.slice(0, -1), FORMALIZA_ROW, b.table.rows.at(-1)] } }
+          if (sec.id === 'finalidades' && b.table) return { table: { ...b.table, rows: [...b.table.rows, FORMALIZA_PURPOSE] } }
+          return b
+        }),
+        ...(sec.id === 'compartilhamento' ? [{ p: FORMALIZA_PARAGRAPH }] : []),
+      ],
+    })),
+  }
+}

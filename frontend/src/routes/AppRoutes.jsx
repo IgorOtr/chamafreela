@@ -34,6 +34,7 @@ import LoginPage from '../modules/auth/LoginPage.jsx'
 import RegisterPage from '../modules/auth/RegisterPage.jsx'
 import MyProfilePage from '../modules/professionals/MyProfilePage.jsx'
 import PrivacyPolicy from '../pages/PrivacyPolicy.jsx'
+import Formaliza from '../pages/Formaliza.jsx'
 import PlansPage from '../pages/PlansPage.jsx'
 import Catalog from '../pages/Catalog.jsx'
 import ProfessionalPublic from '../pages/ProfessionalPublic.jsx'
@@ -67,6 +68,7 @@ export default function AppRoutes() {
       <Route element={<PublicLayout />}>
         <Route index element={<Home />} />
         <Route path="planos" element={<PlansPage />} />
+        <Route path="formalize-seu-negocio" element={<Formaliza />} />
         <Route path="privacidade" element={<PrivacyPolicy />} />
         <Route path="profissionais" element={<Catalog />} />
         <Route path="profissionais/:slug" element={<ProfessionalPublic />} />

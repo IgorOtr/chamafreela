@@ -26,6 +26,9 @@ Node 22+ e Docker (PostgreSQL + PostGIS).
 ## Deploy (Vercel)
 Projeto único na Vercel: frontend estático + API como função serverless na mesma origem, com PostgreSQL/PostGIS gerenciado. Passo a passo, variáveis e limitações em **[`docs/DEPLOY.md`](docs/DEPLOY.md)**. Pagamentos: [`docs/ASAAS.md`](docs/ASAAS.md). Segurança: [`docs/SEGURANCA.md`](docs/SEGURANCA.md).
 
+## CHAMALÁ Formaliza
+Página `/formalize-seu-negocio` (menu "Formalize seu negócio") que apresenta a consultoria de formalização do MEI e leva ao agendamento em ferramenta pronta (ex.: Microsoft Bookings). Sem backend próprio. Configuração da agenda, variável `VITE_FORMALIZA_BOOKING_URL` e planilha de acompanhamento em [`docs/FORMALIZA.md`](docs/FORMALIZA.md).
+
 ## Instalação
 ```bash
 docker compose up -d                      # PostgreSQL/PostGIS na porta 5434

@@ -82,7 +82,7 @@ describe('SEO: robots.txt e sitemap.xml', () => {
     assert.equal(r.status, 200);
     assert.match(r.headers['content-type'], /application\/xml/);
     assert.match(r.text, /^<\?xml version="1\.0" encoding="UTF-8"\?>/);
-    for (const loc of ['/', '/profissionais', '/oportunidades', '/planos', `/profissionais/${ok}`, `/oportunidades/${live}`]) assert.ok(r.text.includes(`<loc>http://localhost:5173${loc}</loc>`), loc);
+    for (const loc of ['/', '/profissionais', '/oportunidades', '/planos', '/formalize-seu-negocio', `/profissionais/${ok}`, `/oportunidades/${live}`]) assert.ok(r.text.includes(`<loc>http://localhost:5173${loc}</loc>`), loc);
     for (const loc of [`/profissionais/${pending}`, `/oportunidades/${draft}`, `/oportunidades/${expired}`, '/painel']) assert.ok(!r.text.includes(loc), `não deve conter ${loc}`);
     assert.equal((await api().get('/api/sitemap.xml')).status, 200);
   });
