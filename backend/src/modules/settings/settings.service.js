@@ -2,23 +2,40 @@ import { prisma } from '../../database/prisma.js';
 import * as audit from '../audit/audit.service.js';
 
 const FORMALIZA_KEY = 'formaliza';
-const FORMALIZA_DEFAULT = { enabled: false, bookingUrl: '' };
+
+export const FORMALIZA_DEFAULT_MESSAGE = [
+  'Olá! Vim pelo CHAMALÁFREE e quero agendar a consultoria do CHAMALÁ Formaliza para abrir meu MEI.',
+  '',
+  'Meu nome:',
+  'O que pretendo fazer ou vender:',
+  'Melhores dias e horários para a conversa:',
+].join('\n');
+
+const FORMALIZA_DEFAULT = { enabled: true, whatsapp: '5524999468823', message: FORMALIZA_DEFAULT_MESSAGE };
 
 export async function getFormaliza() {
   const row = await prisma.siteSetting.findUnique({ where: { key: FORMALIZA_KEY } });
-  return { ...FORMALIZA_DEFAULT, ...(row?.value ?? {}), updatedAt: row?.updatedAt ?? null };
+  const v = row?.value ?? {};
+  return {
+    enabled: typeof v.enabled === 'boolean' ? v.enabled : FORMALIZA_DEFAULT.enabled,
+    whatsapp: v.whatsapp ?? FORMALIZA_DEFAULT.whatsapp,
+    message: v.message ?? FORMALIZA_DEFAULT.message,
+    updatedAt: row?.updatedAt ?? null,
+  };
 }
 
-// Público: o link só é divulgado quando o agendamento está ligado e o link existe.
+export const whatsappUrl = (whatsapp, message) => `https://wa.me/${whatsapp}?text=${encodeURIComponent(message)}`;
+
+// Público: só divulga o link do WhatsApp quando o atendimento está ligado e há número.
 export async function getFormalizaPublic() {
   const s = await getFormaliza();
-  const ready = s.enabled && Boolean(s.bookingUrl);
-  return { ready, bookingUrl: ready ? s.bookingUrl : '' };
+  const ready = s.enabled && Boolean(s.whatsapp);
+  return { ready, url: ready ? whatsappUrl(s.whatsapp, s.message) : '' };
 }
 
 export async function updateFormaliza(actor, data, ip) {
   const before = await getFormaliza();
-  const value = { enabled: data.enabled, bookingUrl: data.bookingUrl };
+  const value = { enabled: data.enabled, whatsapp: data.whatsapp, message: data.message };
   await prisma.siteSetting.upsert({
     where: { key: FORMALIZA_KEY },
     update: { value, updatedById: actor.id },
@@ -26,7 +43,7 @@ export async function updateFormaliza(actor, data, ip) {
   });
   await audit.record({
     actorId: actor.id, action: 'SETTINGS_UPDATE', entity: 'SiteSetting', entityId: FORMALIZA_KEY, ip,
-    changes: { enabled: { de: before.enabled, para: value.enabled }, bookingUrl: { de: before.bookingUrl, para: value.bookingUrl } },
+    changes: Object.fromEntries(['enabled', 'whatsapp', 'message'].map((k) => [k, { de: before[k], para: value[k] }])),
   });
   return getFormaliza();
 }
