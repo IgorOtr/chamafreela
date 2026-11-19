@@ -1,4 +1,4 @@
-import { BarChart3, Layers, Wallet, LineChart as InsightsIcon, ShieldCheck as PrivacyIcon, Palette, Map as MapIcon, Sparkles, SlidersHorizontal, Briefcase, Building2, ClipboardCheck, HeartHandshake, LayoutDashboard, LogOut, Menu, ScrollText, Search, ShieldCheck, Tags, UserCheck, UserCircle, Users, X } from 'lucide-react'
+import { BarChart3, Layers, Wallet, LineChart as InsightsIcon, ShieldCheck as PrivacyIcon, Palette, Map as MapIcon, Sparkles, SlidersHorizontal, Briefcase, Building2, ClipboardCheck, HeartHandshake, LayoutDashboard, LogOut, Menu, ScrollText, Search, Settings, ShieldCheck, Tags, UserCheck, UserCircle, Users, X } from 'lucide-react'
 import { useState } from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import Logo from '../components/Logo.jsx'
@@ -20,6 +20,7 @@ const staffNav = [
   { to: '/painel/relatorios', label: 'Relatórios', icon: BarChart3, roles: ['SUPERADMIN', 'ADMIN'] },
   { to: '/painel/solicitacoes', label: 'Solicitações LGPD', icon: ShieldCheck, roles: ['SUPERADMIN', 'ADMIN'] },
   { to: '/painel/auditoria', label: 'Auditoria', icon: ScrollText, roles: ['SUPERADMIN', 'ADMIN'] },
+  { to: '/painel/configuracoes', label: 'Configurações', icon: Settings, roles: ['SUPERADMIN'] },
   { to: '/painel/privacidade', label: 'Privacidade e dados', icon: PrivacyIcon },
 ]
 const userNav = [

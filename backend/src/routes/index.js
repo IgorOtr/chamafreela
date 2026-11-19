@@ -11,6 +11,7 @@ import notificationsRoutes from '../modules/notifications/notifications.routes.j
 import opportunitiesRoutes from '../modules/opportunities/opportunities.routes.js';
 import privacyRoutes from '../modules/privacy/privacy.routes.js';
 import plansRoutes from '../modules/plans/plans.routes.js';
+import settingsRoutes from '../modules/settings/settings.routes.js';
 import seoRoutes from '../modules/seo/seo.routes.js';
 import professionalsRoutes from '../modules/professionals/professionals.routes.js';
 import recommendationsRoutes from '../modules/recommendations/recommendations.routes.js';
@@ -39,5 +40,6 @@ router.use('/plans', plansRoutes);
 router.use('/subscriptions', subscriptionsRoutes);
 router.use('/billing', billingRoutes);
 router.use('/privacy', privacyRoutes);
+router.use('/settings', settingsRoutes);
 router.use(seoRoutes); // /api/sitemap.xml e /api/robots.txt (o app também expõe na raiz)
 export default router;

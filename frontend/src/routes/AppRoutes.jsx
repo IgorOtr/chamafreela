@@ -26,6 +26,7 @@ import OpportunityDetail from '../pages/OpportunityDetail.jsx'
 import DataRequestsPage from '../modules/admin/DataRequestsPage.jsx'
 import ProfessionalsPage from '../modules/admin/ProfessionalsPage.jsx'
 const ReportsPage = lazy(() => import('../modules/admin/ReportsPage.jsx'))
+const SettingsPage = lazy(() => import('../modules/admin/SettingsPage.jsx'))
 const PlansAdminPage = lazy(() => import('../modules/admin/PlansAdminPage.jsx'))
 const SubscriptionsAdminPage = lazy(() => import('../modules/admin/SubscriptionsAdminPage.jsx'))
 const MySubscriptionPage = lazy(() => import('../modules/billing/MySubscriptionPage.jsx'))
@@ -96,6 +97,7 @@ export default function AppRoutes() {
         <Route path="interesses" element={<RequireAuth roles={['PROFISSIONAL']}><MyInterestsPage /></RequireAuth>} />
         <Route path="empresas" element={<RequireAuth roles={['SUPERADMIN', 'ADMIN']}><CompaniesAdminPage /></RequireAuth>} />
         <Route path="assinatura" element={<RequireAuth roles={['PROFISSIONAL', 'EMPRESA', 'CLIENTE']}><MySubscriptionPage /></RequireAuth>} />
+        <Route path="configuracoes" element={<RequireAuth roles={['SUPERADMIN']}><SettingsPage /></RequireAuth>} />
         <Route path="planos" element={<RequireAuth roles={['SUPERADMIN', 'ADMIN']}><PlansAdminPage /></RequireAuth>} />
         <Route path="assinaturas" element={<RequireAuth roles={['SUPERADMIN', 'ADMIN']}><SubscriptionsAdminPage /></RequireAuth>} />
         <Route path="relatorios" element={<RequireAuth roles={['SUPERADMIN', 'ADMIN']}><ReportsPage /></RequireAuth>} />

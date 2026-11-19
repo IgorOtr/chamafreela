@@ -586,3 +586,11 @@ model WebhookEvent {
 
   @@unique([gateway, eventId])
 }
+
+// Configurações editáveis pelo superadministrador (chave → JSON). Ex.: "formaliza".
+model SiteSetting {
+  key         String   @id
+  value       Json
+  updatedById String?
+  updatedAt   DateTime @updatedAt
+}

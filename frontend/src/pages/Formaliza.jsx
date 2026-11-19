@@ -2,7 +2,7 @@ import { CalendarClock, ExternalLink, House, KeyRound, Lightbulb, MapPin, Messag
 import { Link } from 'react-router-dom'
 import { Button } from '../components/ui.jsx'
 import useSeo from '../hooks/useSeo.js'
-import { BOOKING_READY, BOOKING_URL } from '../modules/formaliza/config.js'
+import { useFetch } from '../hooks/useFetch.js'
 
 const STEPS = [
   'Agende sua consultoria.',
@@ -24,7 +24,9 @@ const CHECKLIST = [
 const wrap = 'mx-auto max-w-5xl px-4'
 
 function BookingButton({ className = '' }) {
-  if (!BOOKING_READY) {
+  const { data } = useFetch('/settings/formaliza')
+  const BOOKING_URL = data?.bookingUrl ?? ''
+  if (!data?.ready || !BOOKING_URL) {
     return (
       <div className={className}>
         <Button variant="outline" disabled className="w-full sm:w-auto"><CalendarClock className="size-4" aria-hidden />Agendamento em breve</Button>

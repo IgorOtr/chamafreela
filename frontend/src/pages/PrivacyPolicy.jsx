@@ -1,7 +1,7 @@
 import { ShieldCheck, TriangleAlert } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import useSeo from '../hooks/useSeo.js'
-import { CONTROLLER, CONTROLLER_READY, FORMALIZA_ON, LAST_UPDATE, POLICY_VERSION } from '../modules/legal/legal.js'
+import { CONTROLLER, CONTROLLER_READY, LAST_UPDATE, POLICY_VERSION } from '../modules/legal/legal.js'
 import { forBilling, withFormaliza } from '../modules/legal/policyContent.js'
 import { useFetch } from '../hooks/useFetch.js'
 
@@ -34,7 +34,8 @@ function Block({ b }) {
 
 export default function PrivacyPolicy() {
   const plans = useFetch('/plans')
-  const { summary: SUMMARY, sections: SECTIONS } = withFormaliza(forBilling(Boolean(plans.data?.[0]?.billingEnabled)), FORMALIZA_ON)
+  const formaliza = useFetch('/settings/formaliza')
+  const { summary: SUMMARY, sections: SECTIONS } = withFormaliza(forBilling(Boolean(plans.data?.[0]?.billingEnabled)), Boolean(formaliza.data?.ready))
   useSeo({ title: 'Política de Privacidade', description: 'Saiba quais dados o CHAMALÁFREE coleta, para que usa, o que fica público, por quanto tempo guarda e como exercer seus direitos na LGPD.', path: '/privacidade' })
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">

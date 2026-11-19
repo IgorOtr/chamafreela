@@ -2,14 +2,12 @@
 
 Página pública `/formalize-seu-negocio` ("Formalize seu negócio" no menu). Ela apresenta o serviço e leva ao agendamento de uma **consultoria online de 30 minutos**. Não há cadastro, painel próprio, calendário próprio nem integração com a API do WhatsApp: o agendamento fica numa ferramenta pronta, e o acompanhamento numa planilha.
 
-## 1. Ligar o botão de agendamento
+## 1. Ligar o botão de agendamento (painel do superadministrador)
 1. Configure a agenda (seção 2) e copie o **link público da página de reserva**.
-2. Na Vercel, crie a variável **`VITE_FORMALIZA_BOOKING_URL`** (Production), com esse link (`https://...`). É uma variável de **build**: faça um novo deploy depois.
-   ```bash
-   printf 'https://SEU-LINK' | vercel env add VITE_FORMALIZA_BOOKING_URL --environment production --yes
-   ```
-3. Sem a variável, a página funciona e o botão aparece como "Agendamento em breve". Só links `https://` são aceitos.
-4. Com o link configurado, a Política de Privacidade passa a incluir automaticamente o parágrafo sobre o agendamento (revise com o jurídico).
+2. Entre como **superadministrador**, abra **Configurações** no menu do painel, cole o link (`https://...`), marque **Ativar o agendamento** e salve. Vale na hora, sem novo deploy.
+3. Sem link, ou com o agendamento desligado, a página funciona e o botão aparece como "Agendamento em breve". Só links `https://` são aceitos.
+4. Ao ativar, a Política de Privacidade passa a incluir automaticamente o parágrafo sobre o agendamento (revise com o jurídico).
+5. Só o superadministrador acessa essa tela, e cada alteração fica registrada na Auditoria. A configuração fica no banco (tabela `SiteSetting`); em produção, a migration é aplicada pelo build da Vercel.
 
 ## 2. Configurar a agenda (Microsoft Bookings)
 Os nomes dos menus podem variar conforme a versão do Microsoft 365. O Bookings exige uma assinatura Microsoft 365 empresarial que o inclua.
